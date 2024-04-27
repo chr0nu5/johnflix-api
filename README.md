@@ -1,1 +1,1 @@
-# johnflix-api
+# JohnFLIX

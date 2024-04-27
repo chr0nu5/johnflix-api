@@ -1,0 +1,12 @@
+[
+{
+    "title": "Movie",
+    "date": null,
+    "tags": ["Actor"],
+    "genres": ["Comedy"],
+    "file_path": "/app/import/movie.mp4",
+    "cover_path": null,
+    "subtitle_path": null,
+    "type": "movie",
+    "hidden": true
+}]

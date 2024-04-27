@@ -1,0 +1,62 @@
+name: ReleasePRD
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  CONTAINER_IMAGE: ${{ secrets.CONTAINER_REGISTRY_IMAGE }}:${{ github.sha }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOC_HUB_USR }}
+        password: ${{ secrets.DOC_HUB_PWD }}
+
+    - name: Build and tag the image
+      id: build-image
+      run: |
+        docker build . --file Dockerfile --tag $CONTAINER_IMAGE
+        echo "::set-output name=image::$CONTAINER_IMAGE"
+        
+    # - name: Config aws
+    #   uses: aws-actions/configure-aws-credentials@v1
+    #   with:
+    #     aws-access-key-id: ${{ secrets.AWS_KEY }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SEC }}
+    #     aws-region: ${{ secrets.AWS_REGION }}
+
+    # - name: Login ECR
+    #   uses: aws-actions/amazon-ecr-login@v1
+
+    # - name: Push into ECR HASH
+    #   run: |
+    #     docker push $CONTAINER_IMAGE
+        
+    # - name: Download Task Definition
+    #   run: |
+    #     aws ecs describe-task-definition --task-definition api \
+    #     --query taskDefinition > task-definition-api.json
+
+    # - name: Add Image ID to Task Definition
+    #   id: task-def-api
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     task-definition: task-definition-api.json
+    #     container-name: api
+    #     image: ${{ steps.build-image.outputs.image }}
+
+    # - name: Deploy ECS
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: ${{ steps.task-def-api.outputs.task-definition }}
+    #     service: api
+    #     cluster: production
+    #     wait-for-service-stability: false
