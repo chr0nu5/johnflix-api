@@ -1,0 +1,3 @@
+#!/bin/bash
+
+coverage run --omit=/app/manage.py manage.py test && coverage report -m
