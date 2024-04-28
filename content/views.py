@@ -225,27 +225,27 @@ class ContentView(View):
 
         contents.append({
             "hash": "",
-            "path": "movies/all",
+            "path": "movies",
             "title": "Movies",
             "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
             "jpeg"
         })
 
-        contents.append({
-            "hash": "",
-            "path": "movies/genres",
-            "title": "Genres",
-            "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
-            "jpeg"
-        })
+    # contents.append({
+    #     "hash": "",
+    #     "path": "movies/genres",
+    #     "title": "Genres",
+    #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
+    #     "jpeg"
+    # })
 
-        contents.append({
-            "hash": "",
-            "path": "movies/tags",
-            "title": "Tags",
-            "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
-            "jpeg"
-        })
+    # contents.append({
+    #     "hash": "",
+    #     "path": "movies/tags",
+    #     "title": "Tags",
+    #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
+    #     "jpeg"
+    # })
 
         for c in all_contents:
             contents.append({
@@ -261,27 +261,27 @@ class ContentView(View):
         if request.user.is_superuser:
             contents.append({
                 "hash": "",
-                "path": "hidden/all",
+                "path": "hidden",
                 "title": "Hidden",
                 "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
                 "hidden"
             })
 
-            contents.append({
-                "hash": "",
-                "path": "hidden/genres",
-                "title": "Hidden Genres",
-                "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
-                "hidden"
-            })
+            # contents.append({
+            #     "hash": "",
+            #     "path": "hidden/genres",
+            #     "title": "Hidden Genres",
+            #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
+            #     "hidden"
+            # })
 
-            contents.append({
-                "hash": "",
-                "path": "hidden/tags",
-                "title": "Hidden Tags",
-                "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
-                "hidden"
-            })
+            # contents.append({
+            #     "hash": "",
+            #     "path": "hidden/tags",
+            #     "title": "Hidden Tags",
+            #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
+            #     "hidden"
+            # })
 
             contents.append({
                 "hash": "",
@@ -1078,18 +1078,6 @@ class RandomView(View):
             data = []
 
             for movie in movies:
-
-                tag = movie.tag.all().filter(hidden=True).first()
-                if tag:
-                    tag = tag.name + ", "
-                else:
-                    tag = ""
-                genre = movie.genre.all().filter(hidden=True).first()
-                if genre:
-                    genre = genre.name
-                else:
-                    genre = ""
-
                 progress = Progress.objects.filter(
                     user=request.user,
                     movie=movie
@@ -1099,7 +1087,7 @@ class RandomView(View):
                     "time": progress.time if progress else None,
                     "duration": movie.duration,
                     "title": movie.title,
-                    "subtitle": "{}{}".format(tag, genre),
+                    "subtitle": movie.date.year if movie.date else None,
                     "hash": movie.hash,
                     "path": "movie",
                     "image": helper.create_presigned_url(
