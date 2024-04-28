@@ -34,9 +34,7 @@ def authorization(function):
     def wrap(request, *args, **kwargs):
         auth = None
         user = None
-        if 'HTTP_AUTHORIZATION' in request.META and \
-                request.META['HTTP_AUTHORIZATION'] != "undefined" and \
-                request.META['HTTP_AUTHORIZATION'] != "null":
+        if 'HTTP_AUTHORIZATION' in request.META:
             auth = request.META['HTTP_AUTHORIZATION']
 
         if auth:
