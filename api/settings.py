@@ -19,17 +19,21 @@ INSTALLED_APPS = [
 ]
 
 # custom app
-INSTALLED_APPS = INSTALLED_APPS + []
+INSTALLED_APPS = INSTALLED_APPS + [
+    'content',
+    'rest_framework',
+    'rest_framework.authtoken'
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'api.middleware.CorsMiddleware'
+    'api.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'api.urls'
@@ -92,3 +96,7 @@ USE_L10N = True
 USE_TZ = False
 STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+FRONTEND_URL = os.getenv("FRONTEND_URL", ".")
+DRF_TOKEN_TTL = 86400
+CACHE_TTL = os.getenv("CACHE_TTL", 3600)

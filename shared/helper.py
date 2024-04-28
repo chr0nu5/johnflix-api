@@ -40,16 +40,15 @@ class Helper:
     def __init__(self):
         self.s3 = boto3.client(
             "s3",
-            endpoint_url="https://{}".format(os.environ["S3_BUCKET_URL"]),
-            aws_access_key_id=os.environ["BB_ACCESS_KEY_ID"],
-            aws_secret_access_key=os.environ["BB_SECRET_ACCESS_KEY"]
+            endpoint_url="https://{}".format(os.environ.get("S3_BUCKET_URL")),
+            aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY")
         )
-        self.bucket = os.environ["S3_BUCKET"]
+        self.bucket = os.environ.get("S3_BUCKET")
         self.base_url = "https://{}/{}".format(
-            os.environ["S3_BUCKET_URL"],
+            os.environ.get("S3_BUCKET_URL"),
             self.bucket
         )
-        self.should_translate = settings.TRANSLATE
 
     def get_now(self):
         return datetime.now(pytz.timezone("America/Sao_Paulo"))

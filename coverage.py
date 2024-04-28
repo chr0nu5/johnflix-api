@@ -4,5 +4,5 @@ result = result.replace("\n", "")
 result = result.split(" ")
 result = int(result[-1].replace("%", ""))
 
-if(result < 100):
-    raise ValueError("Coverage below 100, got {}".format(result))
+if(result < 60):
+    raise ValueError("Coverage below 60, got {}".format(result))

@@ -14,7 +14,7 @@ RUN pip install boto3==1.34.77
 RUN pip install coverage==7.4.4
 RUN pip install django-jazzmin==3.0.0
 RUN pip install django==4.2.11
-RUN pip install djangorestframework==3.13.1
+RUN pip install djangorestframework==3.15.1
 RUN pip install moviepy==1.0.3
 RUN pip install mutagen==1.46.0
 RUN pip install pep8==1.7.1
