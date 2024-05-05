@@ -11,6 +11,7 @@ from content.models import MessageWatchParty
 from content.models import Movie
 from content.models import Photo
 from content.models import PhotoCollection
+from content.models import Playlist
 from content.models import Progress
 from content.models import Season
 from content.models import Tag
@@ -1709,6 +1710,91 @@ class WatchPartyView(View):
         message.save()
 
         return JsonResponse({}, safe=False, status=200)
+
+
+class PlaylistView(View):
+
+    @method_decorator(authorization)
+    def get(self, request, hash=None):
+
+        if hash:
+            playlist = Playlist.objects.filter(hash=hash).first()
+            if not playlist:
+                return JsonResponse({
+                    "error": "Playlist not found"
+                }, safe=False, status=400)
+
+            items = []
+            for media in playlist.movies.all().order_by("date"):
+                items.append({
+                    "title": media.title,
+                    "hash": media.hash,
+                    "subtitle": media.date.year if media.date else None,
+                    "path": "movie",
+                    "image": helper.create_presigned_url(
+                        media.cover.url if media.cover else None,
+                        expiration=settings.CACHE_TTL
+                    ),
+                    "watchlist": media.is_watchlist(
+                        request.user,
+                        WatchList
+                    )
+                })
+
+            data = {
+                "title": playlist.name,
+                "hash": playlist.hash,
+                "subtitle": None,
+                "path": "playlist",
+                "image": helper.create_presigned_url(
+                    playlist.cover.url if playlist.cover else None,
+                    expiration=settings.CACHE_TTL
+                ),
+                "items": items
+            }
+
+            return JsonResponse(data, safe=False, status=200)
+
+        hidden = request.GET.get("hidden", 0)
+        if not request.user.is_superuser:
+            hidden = 0
+
+        playlists = Playlist.objects.filter(hidden=hidden)
+
+        items = []
+
+        for playlist in playlists:
+            _items = []
+            for media in playlist.movies.all().order_by("date"):
+                _items.append({
+                    "title": media.title if hasattr(
+                        media,
+                        "title"
+                    ) else media.name,
+                    "hash": media.hash,
+                    "subtitle": media.date.year if media.date else None,
+                    "path": "movie",
+                    "image": helper.create_presigned_url(
+                        media.cover.url if media.cover else None,
+                        expiration=settings.CACHE_TTL
+                    ),
+                    "watchlist": media.is_watchlist(
+                        request.user,
+                        WatchList
+                    )
+                })
+            items.append({
+                "title": playlist.name,
+                "hash": playlist.hash,
+                "path": "playlist",
+                "items": _items,
+                "image": helper.create_presigned_url(
+                    playlist.cover.url if playlist.cover else None,
+                    expiration=settings.CACHE_TTL
+                )
+            })
+
+        return JsonResponse(items, safe=False, status=200)
 
 
 class BlankView(View):

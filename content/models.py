@@ -795,3 +795,47 @@ class MessageWatchParty(models.Model):
 
     class Meta:
         ordering = ['created_date']
+
+
+class Playlist(models.Model):
+    hash = models.CharField(max_length=36, unique=True)
+    name = models.CharField(max_length=255)
+    hidden = models.BooleanField(default=False)
+    movies = models.ManyToManyField(Movie)
+    cover = models.FileField(upload_to=helper.get_file_path,
+                             blank=True,
+                             null=True)
+    created_date = models.DateTimeField(auto_now_add=True,
+                                        blank=True,
+                                        null=True)
+    modified_date = models.DateTimeField(auto_now=True,
+                                         blank=True,
+                                         null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.hash:
+            self.hash = str(uuid.uuid1())
+        super(Playlist, self).save(*args, **kwargs)
+
+    def link(self):
+        return format_html(
+            "<a target='_blank' href='{}/playlist/{}'>View</a>".format(
+                settings.FRONTEND_URL,
+                self.hash
+            )
+        )
+
+    def get_cover(self):
+        if self.cover:
+            return format_html(
+                "<img src='{}' width='100' />".format(
+                    helper.create_presigned_url(self.cover)
+                )
+            )
+        return ""
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+    class Meta:
+        ordering = ['-created_date']

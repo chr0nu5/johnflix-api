@@ -15,6 +15,7 @@ from content.views import LatestView
 from content.views import MediaView
 from content.views import MovieView
 from content.views import PhotoView
+from content.views import PlaylistView
 from content.views import ProgressView
 from content.views import RandomView
 from content.views import RecommendedView
@@ -72,6 +73,9 @@ urlpatterns = [
     path('watchparty', WatchPartyView.as_view()),
     path('watchparty/<slug:hash>', WatchPartyView.as_view()),
     path('watchparty/<slug:hash>/<slug:id>', WatchPartyView.as_view()),
+
+    path('playlist', PlaylistView.as_view()),
+    path('playlist/<slug:hash>', PlaylistView.as_view()),
 
     # # home
     path('', BlankView.as_view()),

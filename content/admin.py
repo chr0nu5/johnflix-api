@@ -5,6 +5,7 @@ from content.models import Media
 from content.models import Movie
 from content.models import Photo
 from content.models import PhotoCollection
+from content.models import Playlist
 from content.models import Progress
 from content.models import Season
 from content.models import Subtitle
@@ -108,6 +109,12 @@ class WatchPartyAdmin(admin.ModelAdmin):
     list_display = ['hash', 'user', 'movie', 'playing', 'current_time', 'link']
 
 
+class PlaylistAdmin(admin.ModelAdmin):
+    list_display = ['pk', 'get_cover', 'name', 'link', 'hidden']
+    list_editable = ['name', 'hidden']
+    exclude = ['hash']
+
+
 admin.site.register(Content, ContentAdmin)
 admin.site.register(Episode, EpisodeAdmin)
 admin.site.register(Genre, GenreAdmin)
@@ -121,3 +128,4 @@ admin.site.register(Subtitle, SubtitleAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(WatchList, WatchListAdmin)
 admin.site.register(WatchParty, WatchPartyAdmin)
+admin.site.register(Playlist, PlaylistAdmin)
