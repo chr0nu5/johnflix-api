@@ -121,11 +121,11 @@ class ProgressView(View):
                 "image": helper.create_presigned_url(
                     progress.movie.cover.url if progress.movie.cover else None,
                     expiration=progress.movie.duration * 2
-                        ),
+                    ),
                 "watchlist": progress.movie.is_watchlist(
                     request.user,
                     WatchList
-                        )
+                    )
             })
 
         return JsonResponse(watching, safe=False, status=200)
@@ -232,21 +232,21 @@ class ContentView(View):
             "jpeg"
         })
 
-    # contents.append({
-    #     "hash": "",
-    #     "path": "movies/genres",
-    #     "title": "Genres",
-    #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
-    #     "jpeg"
-    # })
+        contents.append({
+            "hash": "",
+            "path": "movies/genres",
+            "title": "Genres",
+            "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
+            "jpeg"
+        })
 
-    # contents.append({
-    #     "hash": "",
-    #     "path": "movies/tags",
-    #     "title": "Tags",
-    #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
-    #     "jpeg"
-    # })
+        contents.append({
+            "hash": "",
+            "path": "movies/tags",
+            "title": "Tags",
+            "image": "https://s3.us-west-004.backblazeb2.com/johnflix/movies."
+            "jpeg"
+        })
 
         for c in all_contents:
             contents.append({
@@ -268,21 +268,21 @@ class ContentView(View):
                 "hidden"
             })
 
-            # contents.append({
-            #     "hash": "",
-            #     "path": "hidden/genres",
-            #     "title": "Hidden Genres",
-            #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
-            #     "hidden"
-            # })
+            contents.append({
+                "hash": "",
+                "path": "hidden/genres",
+                "title": "(H) Genres",
+                "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
+                "hidden"
+            })
 
-            # contents.append({
-            #     "hash": "",
-            #     "path": "hidden/tags",
-            #     "title": "Hidden Tags",
-            #     "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
-            #     "hidden"
-            # })
+            contents.append({
+                "hash": "",
+                "path": "hidden/tags",
+                "title": "(H) Tags",
+                "image": "https://s3.us-west-004.backblazeb2.com/johnflix/"
+                "hidden"
+            })
 
             contents.append({
                 "hash": "",
