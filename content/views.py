@@ -1303,7 +1303,7 @@ class SearchView(View):
                     "subtitle"),
             ).filter(search=s, hidden=False).order_by("?")
 
-        movies = _movies.order_by("?")[:16]
+        movies = _movies.order_by("?")[:40]
 
         _added = []
 
