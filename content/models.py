@@ -61,8 +61,8 @@ class Content(models.Model):
 
 @receiver(post_save, sender=Content, dispatch_uid="s3_upload")
 def update_content(sender, instance, **kwargs):
-    if instance.cover and 'app/tmp' in instance.cover.url:
-        path = "/{}".format(instance.cover.url)
+    if instance.cover and 'tmp' in instance.cover.url:
+        path = "/app/{}".format(instance.cover.url)
         path = helper.resize_image(path, 1280, crop=720)
         instance.cover = helper.upload_file(path)
         instance.save()
@@ -147,8 +147,8 @@ class Genre(models.Model):
 
 @receiver(post_save, sender=Genre, dispatch_uid="s3_upload")
 def update_genre(sender, instance, **kwargs):
-    if instance.cover and 'app/tmp' in instance.cover.url:
-        path = "/{}".format(instance.cover.url)
+    if instance.cover and 'tmp' in instance.cover.url:
+        path = "/app/{}".format(instance.cover.url)
         path = helper.resize_image(path, 1280, crop=720)
         instance.cover = helper.upload_file(path)
         instance.save()
@@ -212,8 +212,8 @@ class Media(models.Model):
 
 @receiver(post_save, sender=Media, dispatch_uid="s3_upload")
 def update_media(sender, instance, **kwargs):
-    if instance.cover and 'app/tmp' in instance.cover.url:
-        path = "/{}".format(instance.cover.url)
+    if instance.cover and 'tmp' in instance.cover.url:
+        path = "/app/{}".format(instance.cover.url)
         path = helper.resize_image(path, 1280, crop=720)
         instance.cover = helper.upload_file(path)
         instance.save()
@@ -324,8 +324,8 @@ class Tag(models.Model):
 
 @receiver(post_save, sender=Tag, dispatch_uid="s3_upload")
 def update_tag(sender, instance, **kwargs):
-    if instance.cover and 'app/tmp' in instance.cover.url:
-        path = "/{}".format(instance.cover.url)
+    if instance.cover and 'tmp' in instance.cover.url:
+        path = "/app/{}".format(instance.cover.url)
         path = helper.resize_image(path, 1280, crop=720)
         instance.cover = helper.upload_file(path)
         instance.save()
@@ -357,8 +357,8 @@ class Subtitle(models.Model):
 
 @receiver(post_save, sender=Subtitle, dispatch_uid="s3_upload")
 def update_subtitle(sender, instance, **kwargs):
-    if instance.vtt and 'app/tmp' in instance.vtt.url:
-        path = "/{}".format(instance.vtt.url)
+    if instance.vtt and 'tmp' in instance.vtt.url:
+        path = "/app/{}".format(instance.vtt.url)
         instance.vtt = helper.upload_file(path)
         instance.save()
 
@@ -433,8 +433,8 @@ class Episode(models.Model):
 
 @receiver(post_save, sender=Episode, dispatch_uid="s3_upload")
 def update_episode(sender, instance, **kwargs):
-    if instance.media and 'app/tmp' in instance.media.url:
-        path = "/{}".format(instance.media.url)
+    if instance.media and 'tmp' in instance.media.url:
+        path = "/app/{}".format(instance.media.url)
 
         clip = VideoFileClip(path)
 
@@ -565,8 +565,8 @@ class Movie(models.Model):
 
 @receiver(post_save, sender=Movie, dispatch_uid="s3_upload")
 def update_movie(sender, instance, **kwargs):
-    if instance.media and 'app/tmp' in instance.media.url:
-        path = "/{}".format(instance.media.url)
+    if instance.media and 'tmp' in instance.media.url:
+        path = "/app/{}".format(instance.media.url)
 
         clip = VideoFileClip(path)
 
@@ -584,8 +584,8 @@ def update_movie(sender, instance, **kwargs):
         instance.media = helper.upload_file(path)
         instance.save()
 
-    if instance.cover and 'app/tmp' in instance.cover.url:
-        path = "/{}".format(instance.cover.url)
+    if instance.cover and 'tmp' in instance.cover.url:
+        path = "/app/{}".format(instance.cover.url)
         path = helper.resize_image(path, 1280, crop=720)
         instance.cover = helper.upload_file(path)
         instance.save()
@@ -649,8 +649,8 @@ class Photo(models.Model):
 
 @receiver(post_save, sender=Photo, dispatch_uid="s3_upload")
 def update_photo(sender, instance, **kwargs):
-    if instance.photo and 'app/tmp' in instance.photo.url:
-        path = "/{}".format(instance.photo.url)
+    if instance.photo and 'tmp' in instance.photo.url:
+        path = "/app/{}".format(instance.photo.url)
         instance.photo = helper.upload_file(path)
         instance.save()
 
@@ -705,8 +705,8 @@ class PhotoCollection(models.Model):
 
 @receiver(post_save, sender=PhotoCollection, dispatch_uid="s3_upload")
 def update_photocollection(sender, instance, **kwargs):
-    if instance.cover and 'app/tmp' in instance.cover.url:
-        path = "/{}".format(instance.cover.url)
+    if instance.cover and 'tmp' in instance.cover.url:
+        path = "/app/{}".format(instance.cover.url)
         path = helper.resize_image(path, 1280, crop=720)
         instance.cover = helper.upload_file(path)
         instance.save()
