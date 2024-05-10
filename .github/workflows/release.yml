@@ -32,30 +32,30 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SEC }}
         aws-region: ${{ secrets.AWS_REGION }}
 
-    # - name: Login ECR
-    #   uses: aws-actions/amazon-ecr-login@v1
+    - name: Login ECR
+      uses: aws-actions/amazon-ecr-login@v1
 
-    # - name: Push into ECR HASH
-    #   run: |
-    #     docker push $CONTAINER_IMAGE
+    - name: Push into ECR
+      run: |
+        docker push $CONTAINER_IMAGE
         
-    # - name: Download Task Definition
-    #   run: |
-    #     aws ecs describe-task-definition --task-definition api \
-    #     --query taskDefinition > task-definition-api.json
+    - name: Download Task Definition
+      run: |
+        aws ecs describe-task-definition --task-definition api \
+        --query taskDefinition > task-definition-api.json
 
-    # - name: Add Image ID to Task Definition
-    #   id: task-def-api
-    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
-    #   with:
-    #     task-definition: task-definition-api.json
-    #     container-name: api
-    #     image: $CONTAINER_IMAGE
+    - name: Add Image ID to Task Definition
+      id: task-def-api
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: task-definition-api.json
+        container-name: api
+        image: $CONTAINER_IMAGE
 
-    # - name: Deploy ECS
-    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-    #   with:
-    #     task-definition: ${{ steps.task-def-api.outputs.task-definition }}
-    #     service: api
-    #     cluster: production
-    #     wait-for-service-stability: false
+    - name: Deploy ECS
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def-api.outputs.task-definition }}
+        service: api
+        cluster: production
+        wait-for-service-stability: false
