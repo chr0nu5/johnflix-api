@@ -112,7 +112,7 @@ class Helper:
         if not object:
             return None
 
-        return "{}/{}".format(self.base_url, object)
+        return "{}{}".format(self.base_url, object)
 
     def extract_frame(self, movie, frame):
         clip = VideoFileClip(movie)

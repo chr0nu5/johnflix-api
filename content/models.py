@@ -47,7 +47,7 @@ class Content(models.Model):
         if self.cover:
             return format_html(
                 "<img src='{}' width='100' />".format(
-                    helper.create_presigned_url(self.cover)
+                    helper.create_presigned_url(self.cover.url)
                 )
             )
         return ""
@@ -131,7 +131,7 @@ class Genre(models.Model):
         if self.cover:
             return format_html(
                 "<img src='{}' width='100' />".format(
-                    helper.create_presigned_url(self.cover)
+                    helper.create_presigned_url(self.cover.url)
                 )
             )
         return ""
@@ -198,7 +198,7 @@ class Media(models.Model):
         if self.cover:
             return format_html(
                 "<img src='{}' width='100' />".format(
-                    helper.create_presigned_url(self.cover)
+                    helper.create_presigned_url(self.cover.url)
                 )
             )
         return ""
@@ -308,7 +308,7 @@ class Tag(models.Model):
         if self.cover:
             return format_html(
                 "<img src='{}' width='100' />".format(
-                    helper.create_presigned_url(self.cover)
+                    helper.create_presigned_url(self.cover.url)
                 )
             )
         return ""
@@ -419,7 +419,7 @@ class Episode(models.Model):
         if self.cover:
             return format_html(
                 "<img src='{}' width='100' />".format(
-                    helper.create_presigned_url(self.cover)
+                    helper.create_presigned_url(self.cover.url)
                 )
             )
         return ""
@@ -549,7 +549,7 @@ class Movie(models.Model):
         if self.cover:
             return format_html(
                 "<img src='{}' width='100' />".format(
-                    helper.create_presigned_url(self.cover)
+                    helper.create_presigned_url(self.cover.url)
                 )
             )
         return ""
@@ -829,7 +829,7 @@ class Playlist(models.Model):
         if self.cover:
             return format_html(
                 "<img src='{}' width='100' />".format(
-                    helper.create_presigned_url(self.cover)
+                    helper.create_presigned_url(self.cover.url)
                 )
             )
         return ""
