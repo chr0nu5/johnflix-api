@@ -95,6 +95,7 @@ class Helper:
                 ExtraArgs={'ContentType': mime},
                 Callback=ProgressPercentage(path)
             )
+            print(response)
             if delete:
                 os.remove(path)
             return file_name
@@ -111,7 +112,7 @@ class Helper:
         if not object:
             return None
 
-        return "{}{}".format(self.base_url, object)
+        return "{}/{}".format(self.base_url, object)
 
     def extract_frame(self, movie, frame):
         clip = VideoFileClip(movie)
@@ -128,22 +129,22 @@ class Helper:
         return image
 
     def resize_image(self, image, w, crop=0):
-        try:
-            input_image = Image.open(image)
-            percent = (w/float(input_image.size[0]))
-            height = int((float(input_image.size[1])*float(percent)))
-            resized_image = input_image.resize(
-                (w, height),
-                Image.Resampling.LANCZOS
-            )
-            resized_image.save(image)
+        # try:
+        #     input_image = Image.open(image)
+        #     percent = (w/float(input_image.size[0]))
+        #     height = int((float(input_image.size[1])*float(percent)))
+        #     resized_image = input_image.resize(
+        #         (w, height),
+        #         Image.Resampling.LANCZOS
+        #     )
+        #     resized_image.save(image)
 
-            if crop > 0 and crop < height:
-                y = (height - crop) / 2
-                cropped = self.crop_image(image, 0, y, w, crop)
-                return cropped
-        except Exception as e:
-            print(e)
+        #     if crop > 0 and crop < height:
+        #         y = (height - crop) / 2
+        #         cropped = self.crop_image(image, 0, y, w, crop)
+        #         return cropped
+        # except Exception as e:
+        #     print(e)
 
         return image
 

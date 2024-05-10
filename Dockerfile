@@ -13,7 +13,7 @@ RUN apt-get install python3-dev -y
 RUN pip install boto3==1.34.77
 RUN pip install coverage==7.4.4
 RUN pip install django-jazzmin==3.0.0
-RUN pip install django==4.2.11
+RUN pip install Django==4.2.13
 RUN pip install djangorestframework==3.15.1
 RUN pip install moviepy==1.0.3
 RUN pip install mutagen==1.46.0
@@ -28,6 +28,8 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY . /app
+
+COPY _patch/utils.py /usr/local/lib/python3.9/site-packages/django/core/files/utils.py
 
 RUN coverage run --omit=/app/manage.py manage.py test && coverage report -m
 RUN python /app/coverage.py

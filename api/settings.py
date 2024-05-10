@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', "random")
 DEBUG = os.environ.get('DEBUG', False)
 ALLOWED_HOSTS = ['*']
 
@@ -101,4 +101,4 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", ".")
 DRF_TOKEN_TTL = 86400
 CACHE_TTL = os.getenv("CACHE_TTL", 3600)
 
-MEDIA_ROOT = "/app/tmp"
+# MEDIA_ROOT = "/app/tmp"

@@ -839,3 +839,19 @@ class Playlist(models.Model):
 
     class Meta:
         ordering = ['-created_date']
+
+
+@receiver(post_save, sender=Playlist, dispatch_uid="s3_upload")
+def update_playlist(sender, instance, **kwargs):
+    if instance.cover and 'tmp' in instance.cover.url:
+        path = "/app/{}".format(instance.cover.url)
+        path = helper.resize_image(path, 1280, crop=720)
+        instance.cover = helper.upload_file(path)
+        instance.save()
+
+
+@receiver(pre_delete, sender=Playlist, dispatch_uid="s3_delete")
+def delete_playlist(sender, instance, **kwargs):
+    instance.photos.all().delete()
+    if instance.cover and instance.cover.url:
+        helper.delete_file(instance.cover.url)
