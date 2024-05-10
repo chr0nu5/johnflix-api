@@ -24,9 +24,10 @@ jobs:
       id: build-image
       run: |
         docker build . --file Dockerfile --tag $CONTAINER_IMAGE
-        
+        echo "::set-output name=image::$CONTAINER_IMAGE"
+
     - name: Config aws
-      uses: aws-actions/configure-aws-credentials@v4
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_KEY }}
         aws-secret-access-key: ${{ secrets.AWS_SEC }}
@@ -38,7 +39,7 @@ jobs:
     - name: Push into ECR
       run: |
         docker push $CONTAINER_IMAGE
-        
+
     - name: Download Task Definition
       run: |
         aws ecs describe-task-definition --task-definition johnfilx \
@@ -50,12 +51,12 @@ jobs:
       with:
         task-definition: task-definition-johnfilx.json
         container-name: johnflix
-        image: $CONTAINER_IMAGE
+        image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy ECS
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def-johnfilx.outputs.task-definition }}
         service: johnflix
-        cluster: production
+        cluster: projects
         wait-for-service-stability: false
