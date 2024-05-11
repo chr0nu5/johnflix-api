@@ -129,3 +129,5 @@ admin.site.register(Tag, TagAdmin)
 admin.site.register(WatchList, WatchListAdmin)
 admin.site.register(WatchParty, WatchPartyAdmin)
 admin.site.register(Playlist, PlaylistAdmin)
+
+admin.site.site_header = 'FLIX'
