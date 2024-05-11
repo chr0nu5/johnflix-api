@@ -15,7 +15,6 @@ from content.models import Tag
 from django import db
 from django.core.management.base import BaseCommand
 from moviepy.editor import VideoFileClip
-from shared.cache import CacheManager
 from shared.helper import Helper
 
 
@@ -24,7 +23,6 @@ class Command(BaseCommand):
     def __init__(self):
         super().__init__()
         self.helper = Helper()
-        self.cache_manager = CacheManager()
 
     def sv_fl(self, file, delete=True, cover=False):
 
