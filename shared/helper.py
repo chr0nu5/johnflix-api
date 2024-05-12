@@ -95,7 +95,6 @@ class Helper:
                 ExtraArgs={'ContentType': mime},
                 Callback=ProgressPercentage(path)
             )
-            print(response)
             if delete:
                 os.remove(path)
             return file_name

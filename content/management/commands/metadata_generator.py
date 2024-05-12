@@ -229,7 +229,7 @@ class Command(BaseCommand):
                                 _img = None
 
                             if _img:
-                                _tag.cover = _img
+                                _tag.cover = _img.replace("/app/tmp", "tmp")
                                 _tag.save()
                                 print()
 
