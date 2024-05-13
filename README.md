@@ -2,7 +2,7 @@
   <img width="100%" src="_repo/logo.png">
 </p>
 
-# What this is
+# What is this
 
 This is an opensource project, to study and try to organize media in a cool way. I`ve been using this for a while now, and decided to make it opensource so other people could use it to organize your personal stash of home-made movies and/or media. You can find the [frontend here](https://github.com/chr0nu5/johnflix-frontend).
 
