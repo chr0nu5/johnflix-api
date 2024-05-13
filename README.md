@@ -126,9 +126,8 @@ For movies, you have a list of objects, with all the information you need for yo
 `subtitle_path` the caption, can also be in `/app/import/bigbuckbunny.vtt`
 `hidden` you can have hidden files, and this is where you say that.
 
-```
-[
-{
+```json
+[{
     "title": "Movie",
     "date": null,
     "tags": ["Actor"],
@@ -142,6 +141,26 @@ For movies, you have a list of objects, with all the information you need for yo
 ```
 
 For `episodes` and `photos`, just look at the json file and provide all the information. ALL the path should be relative to the `/app` on the docker image. 
+
+Just to be safe, in episodes template:
+
+```json
+[{
+    "title": "Inspired: Kemp",
+    "date": null,
+    "season_id": 46,
+    "number": 1,
+    "file_path": "/app/import/1_Kemp.m4v",
+    "subtitle_path": null,
+    "type": "episode",
+    "hidden": false
+}]
+```
+
+`season_id` you should put the id (or pk) already inserted in the admin panel.
+`number` is the episode number
+
+Enjoy :)
 
 # Cover files and images
 
