@@ -6,6 +6,10 @@
 
 This is an opensource project, to study and try to organize media in a cool way. I`ve been using this for a while now, and decided to make it opensource so other people could use it to organize your personal stash of home-made movies and/or media. You can find the [frontend here](https://github.com/chr0nu5/johnflix-frontend).
 
+# Where to start
+
+This project was built using Docker, Python ♥️ and Django, so, it will work on your machine and on the server. I suggest you use AWS ECS to deploy this, to be easy and smooth. Before we start, we need a place to use as a storage. I am using `boto3` for that, so, S3 is the first choice for that. BUT, if you need an alternative, as good as S3, and cheaper, i would recommend [Back Blaze](https://www.backblaze.com/). They are REALLY good.
+
 # Licence
 
 ```
