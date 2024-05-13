@@ -109,7 +109,39 @@ This one is going to look in `/app/convert` folder, and start a few tasks, all t
 
 ## Command: ./manage.py importer
 
-This is the BEAST. It will do the heavy work for you, with a few steps to make it work. It can import `movies`, `episodes` and `photos` (yes, there is a photo feature, but you have to discover for yourself). For a `movie`, imagine that you have `bigbuckbunny.mp4` in `/app/import/bigbuckbunny.mp4`. We need to provide a file to the `importer` so the job starts. 
+This is the BEAST. It will do the heavy work for you, with a few steps to make it work. It can import `movies`, `episodes` and `photos` (yes, there is a photo feature, but you have to discover for yourself). For a `movie`, imagine that you have `bigbuckbunny.mp4` in `/app/import/bigbuckbunny.mp4`. We need to provide a file to the `importer` so the job starts.
+
+Inside `/app/import` there is a few templates for what can be imported. 
+
+`base_episode.json` will import episode files  
+`base_movie.json` will import movie files
+`base_photos.json` will import photo files
+
+For movies, you have a list of objects, with all the information you need for your movie. 
+
+`tags` are, for example, actors.
+`genres` are, drama, romance, and so on
+`file_path` the file to import, in our example, `/app/import/bigbuckbunny.mp4`
+`cover_path` the cover image, and, if you do not provide one, one will be generated for you, a frame from the `3/4` duration of the movie.
+`subtitle_path` the caption, can also be in `/app/import/bigbuckbunny.vtt`
+`hidden` you can have hidden files, and this is where you say that.
+
+```
+[
+{
+    "title": "Movie",
+    "date": null,
+    "tags": ["Actor"],
+    "genres": ["Comedy"],
+    "file_path": "/app/import/movie.mp4",
+    "cover_path": null,
+    "subtitle_path": null,
+    "type": "movie",
+    "hidden": true
+}]
+```
+
+For `episodes` and `photos`, just look at the json file and provide all the information. ALL the path should be relative to the `/app` on the docker image. 
 
 # Cover files and images
 
