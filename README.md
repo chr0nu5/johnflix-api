@@ -162,6 +162,22 @@ Just to be safe, in episodes template:
 
 Enjoy :)
 
+## Command: ./manage.py metadata_exporter
+
+This is a `plugin` for the `importer` command. It can generate the json files needed for importing `movies`. If you use something like [iSubtitle](https://www.bitfield.se/isubtitle/) the file metadata is already on the file. This command will export this data (even the cover file) to `/app/import` in the format you need to import the `movie`, withou any extra work. 
+
+## Command: ./manage.py metadata_generator
+
+This one wil loop all the movies in the database, using the flag `metadata` on the model `Movie` and use [The Movie DB](https://developer.themoviedb.org/docs/getting-started) API to get all the information it can to fill the fields. Will also get all the Tags (cast) for you, with photos :) 
+
+## Command: ./manage.py name_generator
+
+This is for the lazy ones. If you have a file like `/app/import/bigbuckbunny.mp4` and need to import it, you can rename it to `/app/import/(Tag) (Tag) {Genre} {Genre}bigbuckbunny.mp4`
+
+So, the `name_generator` will look into the filename, and extract tags and genres, based on `(Tag)` and `{Genre}` and generate the `.json` file for the `importer` task. You can then input the missing info if you need it. This method will generate a `hidden` movie, you need to change that for a public movie file.
+
+So, if you have `/app/import/(Brad Pitt) {Animation} {Comedy} Big Buck Bunny.mp4` is enough. The tags and genres can be in any order on the name of the file, they will be extracted and everything else, will become the name of the movie.
+
 # Cover files and images
 
 All the images should be in jpg, jpeg or png format. I use pillow under the hood but there`s no support for webm, for example. You can open a PR :)
