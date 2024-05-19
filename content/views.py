@@ -121,12 +121,10 @@ class ProgressView(View):
                 "title": progress.movie.title,
                 "image": helper.create_presigned_url(
                     progress.movie.cover.url if progress.movie.cover else None,
-                    expiration=progress.movie.duration * 2
-                ),
+                    expiration=progress.movie.duration * 2),
                 "watchlist": progress.movie.is_watchlist(
                     request.user,
-                    WatchList
-                )
+                    WatchList)
             })
 
         return JsonResponse(watching, safe=False, status=200)
