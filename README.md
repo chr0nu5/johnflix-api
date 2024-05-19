@@ -182,6 +182,16 @@ So, if you have `/app/import/(Brad Pitt) {Animation} {Comedy} Big Buck Bunny.mp4
 
 All the images should be in jpg, jpeg or png format. I use pillow under the hood but there`s no support for webm, for example. You can open a PR :)
 
+# Subtitles
+
+We use [OpenSubtitles](https://www.opensubtitles.com) to fetch subtitles (PT-BR only for now). You need to create an account, and go to [Consumers](https://www.opensubtitles.com/en/consumers) and create a new consumer. Then, provice this env vars (the key, your usenamd and password are required):
+
+```
+OPENSUBTITLES_KEY=
+OPENSUBTITLES_USER=
+OPENSUBTITLES_PASS=
+```
+
 # Licence
 
 ```
