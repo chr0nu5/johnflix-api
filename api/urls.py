@@ -21,6 +21,7 @@ from content.views import RandomView
 from content.views import RecommendedView
 from content.views import SearchView
 from content.views import SeasonView
+from content.views import SubtitleView
 from content.views import TagView
 from content.views import UserView
 from content.views import WatchPartyView
@@ -56,6 +57,7 @@ urlpatterns = [
     path('movie/<slug:hash>', MovieView.as_view()),
 
     path('movies/all', AllMoviesView.as_view()),
+    path('subtitle/<slug:hash>/<slug:language>', SubtitleView.as_view()),
 
     path('photo', PhotoView.as_view()),
     path('photo/<slug:hash>', PhotoView.as_view()),

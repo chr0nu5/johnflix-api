@@ -14,6 +14,7 @@ from content.models import PhotoCollection
 from content.models import Playlist
 from content.models import Progress
 from content.models import Season
+from content.models import Subtitle
 from content.models import Tag
 from content.models import WatchList
 from content.models import WatchParty
@@ -121,11 +122,11 @@ class ProgressView(View):
                 "image": helper.create_presigned_url(
                     progress.movie.cover.url if progress.movie.cover else None,
                     expiration=progress.movie.duration * 2
-                    ),
+                ),
                 "watchlist": progress.movie.is_watchlist(
                     request.user,
                     WatchList
-                    )
+                )
             })
 
         return JsonResponse(watching, safe=False, status=200)
@@ -1795,6 +1796,55 @@ class PlaylistView(View):
             })
 
         return JsonResponse(items, safe=False, status=200)
+
+
+class SubtitleView(View):
+
+    def get(self, request, hash, language):
+
+        if language == "PT":
+            language = "pt-br"
+
+        if language not in ["pt-br"]:
+            return JsonResponse({
+                "error": "Invalid Language. [PT, EN]"
+            }, safe=False, status=200)
+
+        movie = Movie.objects.filter(hash=hash).first()
+        if not movie:
+            return JsonResponse({
+                "error": "Movie not found"
+            }, safe=False, status=400)
+
+        if movie.subtitle and movie.subtitle.language in ["PT", "pt"]:
+            return JsonResponse({
+                "error": "Movie has subtitle"
+            }, safe=False, status=400)
+
+        file_id = helper.get_subtitle(movie, language)
+
+        url = None
+        if file_id:
+            url = helper.download_subtitle(file_id)
+
+        vtt = None
+        if url:
+            vtt = helper.parse_subtitle(url)
+
+        if vtt:
+            s = Subtitle()
+            s.language = "PT"
+            s.label = "Portuguese"
+            s.vtt = vtt
+            s.save()
+
+            movie.subtitle = s
+            movie.save()
+
+        return JsonResponse({
+            "movie": movie.title,
+            "language": language
+        }, safe=False, status=200)
 
 
 class BlankView(View):
