@@ -24,6 +24,7 @@ RUN pip install pytz==2024.1
 RUN pip install requests==2.31.0
 
 RUN mkdir /app
+RUN mkdir /app/tmp
 
 WORKDIR /app
 
