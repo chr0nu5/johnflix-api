@@ -886,12 +886,41 @@ class MovieView(View):
                 "error": "Forbidden"
             }, safe=False, status=403)
 
-        previous_ep = Movie.objects.filter(
-            tag__in=[curr_ep.tag.all().order_by("?").first()]
-        ).order_by("?").first()
-        next_ep = Movie.objects.filter(
-            tag__in=[curr_ep.tag.all().order_by("?").first()]
-        ).order_by("?").first()
+        in_playlist = Playlist.objects.filter(movies=curr_ep).first()
+
+        previous_ep = None
+        next_ep = None
+
+        if in_playlist and len(in_playlist.movies.all()) > 2:
+            movies = in_playlist.movies.all().order_by("date")
+            all_movies = []
+            for m in movies:
+                all_movies.append(m)
+
+            curr_index = None
+            for i, m in enumerate(all_movies):
+                if m.pk == curr_ep.pk:
+                    curr_index = i
+
+            if curr_index == 0:
+                previous_ep = all_movies[len(all_movies)-1]
+                next_ep = all_movies[curr_index + 1]
+            if curr_index == len(all_movies) - 1:
+                previous_ep = all_movies[curr_index-1]
+                next_ep = all_movies[0]
+
+            if not previous_ep:
+                previous_ep = all_movies[curr_index - 1]
+            if not next_ep:
+                next_ep = all_movies[curr_index + 1]
+
+        else:
+            previous_ep = Movie.objects.filter(
+                tag__in=[curr_ep.tag.all().order_by("?").first()]
+            ).order_by("?").first()
+            next_ep = Movie.objects.filter(
+                tag__in=[curr_ep.tag.all().order_by("?").first()]
+            ).order_by("?").first()
 
         curr_ep.views = curr_ep.views + 1
         curr_ep.save()
