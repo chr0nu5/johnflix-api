@@ -1,11 +1,10 @@
-from rest_framework.authtoken.models import Token
-
 from datetime import datetime
 from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.utils import timezone
+from rest_framework.authtoken.models import Token
 
 
 class AuthToken:
