@@ -8,8 +8,8 @@ services:
     volumes:
       - .:/app
     env_file: .env
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     logging:
       driver: "json-file"
       options:
