@@ -2,6 +2,7 @@ services:
   api:
     build:
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "8000:8000"
     volumes:

@@ -2,7 +2,7 @@ name: ReleasePRD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ no-release ]
 
 env:
   CONTAINER_IMAGE: ${{ secrets.CONTAINER_REGISTRY_IMAGE }}:${{ github.sha }}
