@@ -1,5 +1,18 @@
 #!/bin/bash
 
+git pull --rebase
+
+# Network name
+NETWORK_NAME="flix_network"
+
+# Check if the network already exists
+if ! docker network inspect "$NETWORK_NAME" >/dev/null 2>&1; then
+  echo "Creating network $NETWORK_NAME..."
+  docker network create "$NETWORK_NAME"
+else
+  echo "Network $NETWORK_NAME already exists."
+fi
+
 # Container name
 CONTAINER_NAME="flix-api"
 
@@ -37,6 +50,7 @@ if ! is_container_running "db"; then
     -p 5432:5432 \
     --expose 5432 \
     -v $(pwd)/data:/var/lib/postgresql/data \
+    --network $NETWORK_NAME \
     postgres
 else
   echo "db container is already running."
@@ -49,6 +63,7 @@ if ! is_container_running "redis"; then
     --name redis \
     --restart always \
     -p 6379:6379 \
+    --network $NETWORK_NAME \
     redis
 else
   echo "redis container is already running."
@@ -65,6 +80,7 @@ docker run -d \
   --log-driver json-file \
   --log-opt max-file=1 \
   --log-opt max-size=10m \
+  --network $NETWORK_NAME \
   $CONTAINER_NAME
 
 echo "Container $CONTAINER_NAME has been successfully started."
