@@ -317,4 +317,7 @@ class Helper:
         key_data = "{}|{}|{}".format(token, url_path, sorted_query)
 
         cache_key = hashlib.sha256(key_data.encode()).hexdigest()
-        return "cache_{}".format(cache_key)
+
+        # disable cache for now
+        return str(uuid.uuid1())
+        # return "cache_{}".format(cache_key)
