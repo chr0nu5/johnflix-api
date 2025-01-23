@@ -9,7 +9,9 @@ import subprocess
 import sys
 import threading
 import uuid
+import hashlib
 
+from urllib.parse import urlencode
 from PIL import Image
 from botocore.exceptions import ClientError
 from datetime import datetime
@@ -304,3 +306,26 @@ class Helper:
             pass
 
         return None
+
+    def get_cache_key(self, request):
+        # Obtém o token do header Authorization
+        token = request.headers.get('Authorization', '')
+
+        # Obtém a URL base e os parâmetros GET em ordem alfabética
+        url_path = request.path  # Somente a URL sem os parâmetros
+        query_params = request.GET.dict()  # Obtém os parâmetros GET como dicionário
+        sorted_query = urlencode(sorted(query_params.items()))  # Ordena os parâmetros GET
+
+        # Concatena o token, o caminho e os parâmetros ordenados para gerar a chave
+        key_data = "{}|{}|{}".format(token, url_path, sorted_query)
+
+        # Cria um hash SHA-256 para garantir que a chave tenha um tamanho fixo
+        cache_key = hashlib.sha256(key_data.encode()).hexdigest()
+        return "cache_{}".format(cache_key)
+
+
+
+
+
+
+

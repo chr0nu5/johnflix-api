@@ -22,6 +22,7 @@ RUN pip install psycopg2==2.8.6
 RUN pip install python-magic==0.4.26
 RUN pip install pytz==2024.1
 RUN pip install requests==2.31.0
+RUN pip install redis==5.2.1
 
 RUN mkdir /app
 RUN mkdir /app/tmp

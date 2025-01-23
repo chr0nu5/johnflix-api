@@ -3,6 +3,7 @@ import random
 import re
 import time
 
+from django.core.cache import cache
 from content.models import Content
 from content.models import Episode
 from content.models import Genre
@@ -39,6 +40,12 @@ class ProgressView(View):
 
     @method_decorator(authorization)
     def get(self, request):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         watching = {"episodes": [], "movies": []}
 
@@ -127,6 +134,8 @@ class ProgressView(View):
                     WatchList)
             })
 
+        cache.set(cache_key, watching)
+
         return JsonResponse(watching, safe=False, status=200)
 
     @method_decorator(authorization)
@@ -184,6 +193,12 @@ class ContentView(View):
     @method_decorator(authorization)
     def get(self, request, hash=None):
 
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
+
         if hash:
             content = Content.objects.filter(hash=hash).first()
             if not content:
@@ -200,7 +215,7 @@ class ContentView(View):
             if not request.user.is_superuser:
                 medias = medias.filter(hidden=False)
 
-            return JsonResponse({
+            data = {
                 "hash": content.hash,
                 "path": "content",
                 "title": content.name,
@@ -217,7 +232,10 @@ class ContentView(View):
                         expiration=settings.CACHE_TTL
                     )
                 } for media in medias]
-            }, safe=False, status=200)
+            }
+            cache.set(cache_key, data)
+
+            return JsonResponse(data, safe=False, status=200)
 
         all_contents = Content.objects.all().order_by("name")
 
@@ -291,6 +309,8 @@ class ContentView(View):
                 "photos.jpg"
             })
 
+        cache.set(cache_key, contents)
+
         return JsonResponse(contents, safe=False, status=200)
 
 
@@ -298,6 +318,12 @@ class MediaView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         media = Media.objects.filter(hash=hash).first()
         if not media:
@@ -357,6 +383,8 @@ class MediaView(View):
                     )} for episode in episodes]
             })
 
+        cache.set(cache_key, content)
+
         return JsonResponse(content, safe=False, status=200)
 
 
@@ -364,6 +392,12 @@ class SeasonView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         season = Season.objects.filter(hash=hash).first()
         if not season:
@@ -427,6 +461,8 @@ class SeasonView(View):
             "episodes": data
         }
 
+        cache.set(cache_key, content)
+
         return JsonResponse(content, safe=False, status=200)
 
 
@@ -434,6 +470,12 @@ class GenreView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         if hash:
             genre = Genre.objects.filter(hash=hash).first()
@@ -496,6 +538,7 @@ class GenreView(View):
                 "total_pages": paginator.num_pages
             }
 
+            cache.set(cache_key, data)
             return JsonResponse(data, safe=False, status=200)
 
         hidden = request.GET.get("hidden", 0)
@@ -542,6 +585,7 @@ class GenreView(View):
                     expiration=settings.CACHE_TTL
                 )
             })
+        cache.set(cache_key, items)
 
         return JsonResponse(items, safe=False, status=200)
 
@@ -550,6 +594,12 @@ class TagView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         if hash:
             tag = Tag.objects.filter(hash=hash).first()
@@ -622,6 +672,7 @@ class TagView(View):
                 "items": items,
                 "total_pages": paginator.num_pages
             }
+            cache.set(cache_key, data)
 
             return JsonResponse(data, safe=False, status=200)
 
@@ -630,7 +681,7 @@ class TagView(View):
             hidden = 0
         tags = Tag.objects.filter(hidden=hidden).order_by("order", "name")
 
-        return JsonResponse([{
+        data = [{
             "title": tag.name,
             "hash": tag.hash,
             "path": "tag",
@@ -639,13 +690,21 @@ class TagView(View):
                 tag.cover.url if tag.cover else None,
                 expiration=settings.CACHE_TTL
             )
-        } for tag in tags], safe=False, status=200)
+        } for tag in tags]
 
+        cache.set(cache_key, data)
+        return JsonResponse(data, safe=False, status=200)
 
 class EpisodeView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         curr_ep = Episode.objects.filter(hash=hash).first()
         if not curr_ep:
@@ -807,6 +866,7 @@ class EpisodeView(View):
         ).order_by("-modified_date")[4:]:
             p.delete()
 
+        cache.set(cache_key, data)
         return JsonResponse(data)
 
 
@@ -814,6 +874,12 @@ class AllMoviesView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         order = request.GET.get("order", "-id")
 
@@ -864,16 +930,26 @@ class AllMoviesView(View):
                 "watchlist": movie.is_watchlist(request.user, WatchList)
             })
 
-        return JsonResponse({
+        _data = {
             "total_pages": paginator.num_pages,
             "items": data
-        }, safe=False)
+        }
+
+        cache.set(cache_key, _data)
+
+        return JsonResponse(_data, safe=False)
 
 
 class MovieView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         curr_ep = Movie.objects.filter(hash=hash).first()
         if not curr_ep:
@@ -1024,6 +1100,7 @@ class MovieView(View):
         ).order_by("-modified_date")[4:]:
             p.delete()
 
+        cache.set(cache_key, data)
         return JsonResponse(data)
 
 
@@ -1031,6 +1108,12 @@ class PhotoView(View):
 
     @method_decorator(authorization)
     def get(self, request, hash=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         if not request.user.is_superuser:
             return JsonResponse({
@@ -1068,13 +1151,16 @@ class PhotoView(View):
                     )
                 })
 
-            return JsonResponse({
+            _data = {
                 "title": collection.title,
                 "hash": collection.hash,
                 "path": "photos",
                 "items": data,
                 "total_pages": paginator.num_pages
-            }, safe=False)
+            }
+
+            cache.set(cache_key, _data)
+            return JsonResponse(_data, safe=False)
 
         collections = PhotoCollection.objects.all().order_by("title")
 
@@ -1090,6 +1176,7 @@ class PhotoView(View):
             } for collection in collections
         ]
 
+        cache.set(cache_key, data)
         return JsonResponse(data, safe=False)
 
 
@@ -1097,6 +1184,12 @@ class RandomView(View):
 
     @method_decorator(authorization)
     def get(self, request, type=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         if type == "movies":
             hidden = request.GET.get("hidden", 0)
@@ -1129,6 +1222,8 @@ class RandomView(View):
                     )
                 })
 
+            cache.set(cache_key, data)
+
             return JsonResponse(data, safe=False)
 
         if type == "episodes":
@@ -1159,6 +1254,8 @@ class RandomView(View):
                         WatchList
                     )
                 })
+
+            cache.set(cache_key, data)
             return JsonResponse(data, safe=False)
 
         return JsonResponse([], safe=False)
@@ -1168,6 +1265,12 @@ class LatestView(View):
 
     @method_decorator(authorization)
     def get(self, request, type=None):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         if type == "movies":
             hidden = request.GET.get("hidden", 0)
@@ -1214,6 +1317,8 @@ class LatestView(View):
                     )
                 })
 
+            cache.set(cache_key, data)
+
             return JsonResponse(data, safe=False)
 
         if type == "episodes":
@@ -1243,6 +1348,8 @@ class LatestView(View):
                     )
                 })
 
+            cache.set(cache_key, data)
+
             return JsonResponse(data, safe=False)
 
         return JsonResponse([], safe=False)
@@ -1252,6 +1359,12 @@ class SearchView(View):
 
     @method_decorator(authorization)
     def get(self, request):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         items = []
 
@@ -1360,16 +1473,26 @@ class SearchView(View):
             })
             _added.append(movie.hash)
 
-        return JsonResponse({
+
+        data = {
             "s": s,
             "items": items
-        }, safe=False, status=200)
+        }
+        cache.set(cache_key, data)
+
+        return JsonResponse(data, safe=False, status=200)
 
 
 class RecommendedView(View):
 
     @method_decorator(authorization)
     def get(self, request):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         items = []
         hash = request.GET.get("hash", None)
@@ -1484,9 +1607,11 @@ class RecommendedView(View):
                     })
                     _added.append(movie.hash)
 
-        return JsonResponse({
+        data = {
             "items": items[:8]
-        }, safe=False, status=200)
+        }
+        cache.set(cache_key, data)
+        return JsonResponse(data, safe=False, status=200)
 
 
 class UserView(View):
@@ -1494,10 +1619,20 @@ class UserView(View):
     @method_decorator(authorization)
     def get(self, request):
 
-        return JsonResponse({
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
+
+        data = {
             "username": request.user.username,
             "is_superuser": request.user.is_superuser
-        }, safe=False, status=200)
+        }
+
+        cache.set(cache_key, data)
+
+        return JsonResponse(data, safe=False, status=200)
 
 
 class AuthView(View):
@@ -1544,6 +1679,12 @@ class WathListView(View):
 
     @method_decorator(authorization)
     def get(self, request):
+
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
 
         items = WatchList.objects.filter(user=request.user)
 
@@ -1593,10 +1734,13 @@ class WathListView(View):
                 "watchlist": True
             })
 
-        return JsonResponse({
+        _data = {
             "total_pages": paginator.num_pages,
             "items": data
-        }, safe=False)
+        }
+
+        cache.set(cache_key, _data)
+        return JsonResponse(_data, safe=False)
 
     @method_decorator(authorization)
     def post(self, request):
@@ -1745,6 +1889,12 @@ class PlaylistView(View):
     @method_decorator(authorization)
     def get(self, request, hash=None):
 
+        cache_key = helper.get_cache_key(request)
+        if cache_key:
+            cached_data = cache.get(cache_key)
+            if cached_data:
+                return JsonResponse(cached_data, safe=False, status=200)
+
         if hash:
             playlist = Playlist.objects.filter(hash=hash).first()
             if not playlist:
@@ -1780,6 +1930,8 @@ class PlaylistView(View):
                 ),
                 "items": items
             }
+
+            cache.set(cache_key, data)
 
             return JsonResponse(data, safe=False, status=200)
 
@@ -1821,6 +1973,8 @@ class PlaylistView(View):
                     expiration=settings.CACHE_TTL
                 )
             })
+
+        cache.set(cache_key, items)
 
         return JsonResponse(items, safe=False, status=200)
 

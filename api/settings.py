@@ -99,6 +99,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", ".")
 DRF_TOKEN_TTL = 86400
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379/1',
+    }
+}
+
 CACHE_TTL = os.getenv("CACHE_TTL", 3600)
 
 CSRF_TRUSTED_ORIGINS = [
