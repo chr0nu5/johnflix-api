@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Container name
-CONTAINER_NAME="api"
+CONTAINER_NAME="flix-api"
 
 # Function to check if a container is running
 is_container_running() {
@@ -14,7 +14,7 @@ is_container_running() {
 }
 
 # Build the image from the Dockerfile
-docker build -t api-image -f Dockerfile .
+docker build -t $CONTAINER_NAME -f Dockerfile .
 
 # Check if the container is running
 if [ "$(docker ps -q -f name=$CONTAINER_NAME)" ]; then

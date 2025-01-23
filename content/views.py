@@ -1473,7 +1473,6 @@ class SearchView(View):
             })
             _added.append(movie.hash)
 
-
         data = {
             "s": s,
             "items": items
