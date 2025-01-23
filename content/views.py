@@ -695,6 +695,7 @@ class TagView(View):
         cache.set(cache_key, data)
         return JsonResponse(data, safe=False, status=200)
 
+
 class EpisodeView(View):
 
     @method_decorator(authorization)
