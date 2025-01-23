@@ -98,7 +98,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", ".")
-DRF_TOKEN_TTL = 86400
+DRF_TOKEN_TTL = 3600*24*365
 
 CACHES = {
     'default': {
