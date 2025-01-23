@@ -3,6 +3,16 @@
 # Container name
 CONTAINER_NAME="api"
 
+# Function to check if a container is running
+is_container_running() {
+  container_name=$1
+  if [ "$(docker ps -q -f name=$container_name)" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
 # Build the image from the Dockerfile
 docker build -t api-image -f Dockerfile .
 
@@ -15,6 +25,33 @@ elif [ "$(docker ps -aq -f status=exited -f name=$CONTAINER_NAME)" ]; then
     # Check if the container exists but is stopped
     echo "The container $CONTAINER_NAME exists but is stopped. Removing the container..."
     docker rm $CONTAINER_NAME
+fi
+
+# Start the db container if it's not running
+if ! is_container_running "db"; then
+  echo "Starting db container..."
+  docker run -d \
+    --name db \
+    --restart always \
+    --env-file .env \
+    -p 5432:5432 \
+    --expose 5432 \
+    -v $(pwd)/data:/var/lib/postgresql/data \
+    postgres
+else
+  echo "db container is already running."
+fi
+
+# Start the redis container if it's not running
+if ! is_container_running "redis"; then
+  echo "Starting redis container..."
+  docker run -d \
+    --name redis \
+    --restart always \
+    -p 6379:6379 \
+    redis
+else
+  echo "redis container is already running."
 fi
 
 # Run the new container with the same configuration as in docker-compose
