@@ -65,6 +65,6 @@ docker run -d \
   --log-driver json-file \
   --log-opt max-file=1 \
   --log-opt max-size=10m \
-  api-image
+  $CONTAINER_NAME
 
 echo "Container $CONTAINER_NAME has been successfully started."
