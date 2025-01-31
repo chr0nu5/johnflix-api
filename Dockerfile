@@ -15,6 +15,8 @@ RUN pip install coverage==7.4.4
 RUN pip install django-jazzmin==3.0.0
 RUN pip install Django==4.2.13
 RUN pip install djangorestframework==3.15.1
+RUN pip install djangorestframework-simplejwt==5.4.0
+RUN pip install django-filter==24.3
 RUN pip install moviepy==1.0.3
 RUN pip install mutagen==1.46.0
 RUN pip install pep8==1.7.1
