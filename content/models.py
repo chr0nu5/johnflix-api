@@ -527,8 +527,6 @@ class Movie(models.Model):
                                          null=True)
 
     def is_watchlist(self, user, model):
-        if user.email == "anon@fehra.co":
-            return False
         found = model.objects.filter(user=user, movie=self).count()
         return found > 0
 
