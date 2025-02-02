@@ -97,14 +97,6 @@ if 'test' in sys.argv or 'test_coverage' in sys.argv:
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
     DATABASES['default']['NAME'] = 'test'
 
-if os.environ.get("REMOTE_DB_HOST", None):
-    DATABASES['remote'] = {}
-    DATABASES['remote']['ENGINE'] = 'django.db.backends.sqlite3'
-    DATABASES['remote']['HOST'] = os.environ.get("HOST")
-    DATABASES['remote']['NAME'] = os.environ.get("NAME")
-    DATABASES['remote']['USER'] = os.environ.get("USER")
-    DATABASES['remote']['PASSWORD'] = os.environ.get("PASSWORD")
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
