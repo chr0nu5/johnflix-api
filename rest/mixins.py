@@ -1,3 +1,8 @@
+from django.conf import settings
+from django.core.cache import cache
+from rest_framework.response import Response
+
+
 class HiddenFilterMixin(object):
     def filter_hidden(self, queryset):
         if not self.request.user.is_superuser:
@@ -26,3 +31,25 @@ class OrderingMixin(object):
                 ordering_field = model_field
             return queryset.order_by(ordering_field)
         return queryset
+
+
+class CachedListMixin(object):
+    def get_cache_key(self):
+        user = self.request.user
+        query_params = self.request.GET.dict()
+        sorted_params = sorted(query_params.items())
+        query_string = "&".join(["{}={}".format(k, v)
+                                 for k, v in sorted_params])
+        user_flag = "super" if user.is_superuser else "normal"
+        key = "cache:{}:{}:{}".format(
+            self.request.get_full_path(), user_flag, query_string)
+        return key
+
+    def list(self, request, *args, **kwargs):
+        key = self.get_cache_key()
+        cached_data = cache.get(key)
+        if cached_data is not None:
+            return Response(cached_data)
+        response = super(CachedListMixin, self).list(request, *args, **kwargs)
+        cache.set(key, response.data, settings.CACHE_TTL)
+        return response

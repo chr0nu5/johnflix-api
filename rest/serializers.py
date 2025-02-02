@@ -40,7 +40,7 @@ class TagSerializer(BaseCDNModelSerializer):
 class MovieSerializer(BaseCDNModelSerializer):
     tag = TagSerializer(many=True, read_only=True)
     genre = GenreSerializer(many=True, read_only=True)
-    watchlist = serializers.SerializerMethodField()
+    # watchlist = serializers.SerializerMethodField()
 
     def get_watchlist(self, obj):
         request = self.context.get("request")
@@ -77,7 +77,7 @@ class EpisodeSerializer(BaseCDNModelSerializer):
     tag = TagSerializer(many=True, read_only=True)
     season = serializers.SerializerMethodField()
     number = serializers.SerializerMethodField()
-    watchlist = serializers.SerializerMethodField()
+    # watchlist = serializers.SerializerMethodField()
 
     def get_season(self, obj):
         if obj.season and obj.season.number is not None:

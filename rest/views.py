@@ -7,6 +7,7 @@ from content.models import Season
 from content.models import Tag
 from django_filters.rest_framework import DjangoFilterBackend
 from rest.middlewares import IsSuperUserOrVisibleOnly
+from rest.mixins import CachedListMixin
 from rest.mixins import HiddenFilterMixin
 from rest.mixins import OrderingMixin
 from rest.pagination import CustomPageNumberPagination
@@ -29,7 +30,7 @@ class GenericViewSet(HiddenFilterMixin,
     pass
 
 
-class GenreViewSet(GenericViewSet):
+class GenreViewSet(CachedListMixin, GenericViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
@@ -49,7 +50,7 @@ class GenreViewSet(GenericViewSet):
         return queryset
 
 
-class GenreMoviesViewSet(GenericViewSet):
+class GenreMoviesViewSet(CachedListMixin, GenericViewSet):
     serializer_class = MovieSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
     pagination_class = CustomPageNumberPagination
@@ -67,7 +68,7 @@ class GenreMoviesViewSet(GenericViewSet):
         return queryset
 
 
-class TagViewSet(GenericViewSet):
+class TagViewSet(CachedListMixin, GenericViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
@@ -87,7 +88,7 @@ class TagViewSet(GenericViewSet):
         return queryset
 
 
-class TagMoviesViewSet(GenericViewSet):
+class TagMoviesViewSet(CachedListMixin, GenericViewSet):
     serializer_class = MovieSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
     pagination_class = CustomPageNumberPagination
@@ -105,7 +106,7 @@ class TagMoviesViewSet(GenericViewSet):
         return queryset
 
 
-class MovieViewSet(GenericViewSet):
+class MovieViewSet(CachedListMixin, GenericViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
@@ -135,7 +136,7 @@ class MovieViewSet(GenericViewSet):
         return queryset
 
 
-class ContentViewSet(GenericViewSet):
+class ContentViewSet(CachedListMixin, GenericViewSet):
     queryset = Content.objects.all()
     serializer_class = ContentSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
@@ -155,7 +156,7 @@ class ContentViewSet(GenericViewSet):
         return queryset
 
 
-class ContentMediasViewSet(GenericViewSet):
+class ContentMediasViewSet(CachedListMixin, GenericViewSet):
     serializer_class = MediaSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
     pagination_class = CustomPageNumberPagination
@@ -174,7 +175,7 @@ class ContentMediasViewSet(GenericViewSet):
         return queryset
 
 
-class MediaSeasonsViewSet(GenericViewSet):
+class MediaSeasonsViewSet(CachedListMixin, GenericViewSet):
     serializer_class = SeasonSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
     pagination_class = CustomPageNumberPagination
@@ -191,7 +192,7 @@ class MediaSeasonsViewSet(GenericViewSet):
         return queryset
 
 
-class SeasonEpisodesViewSet(GenericViewSet):
+class SeasonEpisodesViewSet(CachedListMixin, GenericViewSet):
     serializer_class = EpisodeSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
     pagination_class = CustomPageNumberPagination
