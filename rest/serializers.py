@@ -5,6 +5,10 @@ from content.models import Episode
 from content.models import Genre
 from content.models import Media
 from content.models import Movie
+from content.models import Photo
+from content.models import PhotoCollection
+from content.models import Playlist
+from content.models import Progress
 from content.models import Season
 from content.models import Tag
 from content.models import WatchList
@@ -40,7 +44,19 @@ class TagSerializer(BaseCDNModelSerializer):
 class MovieSerializer(BaseCDNModelSerializer):
     tag = TagSerializer(many=True, read_only=True)
     genre = GenreSerializer(many=True, read_only=True)
+    progress = serializers.SerializerMethodField()
     # watchlist = serializers.SerializerMethodField()
+
+    def get_progress(self, obj):
+        request = self.context.get("request")
+        if request and request.user.is_authenticated:
+            progress_obj = Progress.objects.filter(
+                movie=obj,
+                user=request.user
+            ).first()
+            if progress_obj and progress_obj.time is not None:
+                return progress_obj.time
+        return 0
 
     def get_watchlist(self, obj):
         request = self.context.get("request")
@@ -77,6 +93,7 @@ class EpisodeSerializer(BaseCDNModelSerializer):
     tag = TagSerializer(many=True, read_only=True)
     season = serializers.SerializerMethodField()
     number = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
     # watchlist = serializers.SerializerMethodField()
 
     def get_season(self, obj):
@@ -89,6 +106,17 @@ class EpisodeSerializer(BaseCDNModelSerializer):
             return "{:02d}".format(obj.number)
         return None
 
+    def get_progress(self, obj):
+        request = self.context.get("request")
+        if request and request.user.is_authenticated:
+            progress_obj = Progress.objects.filter(
+                episode=obj,
+                user=request.user
+            ).first()
+            if progress_obj and progress_obj.time is not None:
+                return progress_obj.time
+        return 0
+
     def get_watchlist(self, obj):
         request = self.context.get("request")
         if request and request.user.is_authenticated:
@@ -97,5 +125,25 @@ class EpisodeSerializer(BaseCDNModelSerializer):
 
     class Meta:
         model = Episode
-        # fields = '__all__'
         exclude = ['created_date', 'modified_date', 'hidden', 'id']
+
+
+class PhotoCollectionSerializer(BaseCDNModelSerializer):
+    class Meta:
+        model = PhotoCollection
+        exclude = ['photos', 'id', 'hidden',
+                   'created_date', 'modified_date', 'tag', 'genre']
+
+
+class PhotoSerializer(BaseCDNModelSerializer):
+    class Meta:
+        model = Photo
+        exclude = ['id', 'hidden', 'created_date', 'modified_date']
+
+
+class PlaylistSerializer(BaseCDNModelSerializer):
+    movies = MovieSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Playlist
+        exclude = ['id', 'hidden', 'created_date', 'modified_date']
