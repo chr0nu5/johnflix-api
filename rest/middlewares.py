@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission
 
+
 class IsSuperUserOrVisibleOnly(BasePermission):
 
     def has_permission(self, request, view):

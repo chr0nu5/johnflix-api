@@ -2,6 +2,7 @@ from django.conf import settings
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
+
 class CustomPageNumberPagination(PageNumberPagination):
     page_size_query_param = 'limit'
     max_page_size = settings.REST_FRAMEWORK["PAGE_SIZE"]
