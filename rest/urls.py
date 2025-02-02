@@ -9,6 +9,7 @@ from rest.views import MovieViewSet
 from rest.views import SeasonEpisodesViewSet
 from rest.views import TagMoviesViewSet
 from rest.views import TagViewSet
+from rest.views import UserProfileView
 from rest.views import UserWatchlistView
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -46,6 +47,8 @@ urlpatterns = [
         TagMoviesViewSet.as_view({'get': 'list'}),
         name='tag-movies'
     ),
+
+    path('v2/user/profile/', UserProfileView.as_view(), name='user-profile'),
 
     path(
         'v2/user/watchlist/',

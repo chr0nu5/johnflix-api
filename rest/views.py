@@ -209,6 +209,14 @@ class SeasonEpisodesViewSet(CachedListMixin, GenericViewSet):
         return queryset
 
 
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        username = request.user.username
+        return Response({"username": username})
+
+
 class UserWatchlistView(APIView):
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
 
