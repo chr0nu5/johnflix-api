@@ -33,97 +33,97 @@ router.register(r'playlists', PlaylistViewSet)
 
 urlpatterns = [
     path(
-        'v2/content/<str:hash>/medias/',
+        'content/<str:hash>/medias/',
         ContentMediasViewSet.as_view({'get': 'list'}),
         name='content-medias'
     ),
     path(
-        'v2/media/<str:hash>/seasons/',
+        'media/<str:hash>/seasons/',
         MediaSeasonsViewSet.as_view({'get': 'list'}),
         name='media-seasons'
     ),
     path(
-        'v2/season/<str:hash>/episodes/',
+        'season/<str:hash>/episodes/',
         SeasonEpisodesViewSet.as_view({'get': 'list'}),
         name='season-episodes'
     ),
     path(
-        'v2/genre/<str:hash>/movies/',
+        'genre/<str:hash>/movies/',
         GenreMoviesViewSet.as_view({'get': 'list'}),
         name='genre-movies'
     ),
     path(
-        'v2/tag/<str:hash>/movies/',
+        'tag/<str:hash>/movies/',
         TagMoviesViewSet.as_view({'get': 'list'}),
         name='tag-movies'
     ),
 
     path(
-        'v2/galleries/',
+        'galleries/',
         GalleriesViewSet.as_view({"get": "list"}),
         name='galleries'
     ),
     path(
-        'v2/gallery/<str:hash>/photos/',
+        'gallery/<str:hash>/photos/',
         GalleryPhotosViewSet.as_view({"get": "list"}),
         name='gallery-photos'
     ),
 
     path(
-        'v2/user/profile/',
+        'user/profile/',
         UserProfileView.as_view(),
         name='user-profile'
     ),
     path(
-        'v2/user/watchlist/',
+        'user/watchlist/',
         UserWatchlistView.as_view(),
         name='user-watchlist'
     ),
     path(
-        'v2/user/watchlist/save/',
+        'user/watchlist/save/',
         AddOrRemoveWatchListView.as_view(),
         name='user-watchlist-update'
     ),
     path(
-        'v2/user/progress/',
+        'user/progress/',
         ProgressSaveView.as_view(),
         name='user-progress-save'
     ),
     path(
-        'v2/user/watching/',
+        'user/watching/',
         UserWatchingView.as_view(),
         name='user-watching'
     ),
 
     path(
-        'v2/search/',
+        'search/',
         SearchView.as_view(),
         name='search'
     ),
 
     path(
-        "v2/recommended/",
+        "recommended/",
         RecommendedMoviesView.as_view(),
         name="recommended-movies"
     ),
 
     path(
-        'v2/subtitle/<str:movie_hash>/<str:language>/',
+        'subtitle/<str:movie_hash>/<str:language>/',
         SubtitleView.as_view(),
         name='subtitle-fetch'
     ),
 
-    path('v2/', include(router.urls)),
+    path('', include(router.urls)),
 ]
 
 urlpatterns += [
     path(
-        'v2/auth/login/',
+        'auth/login/',
         TokenObtainPairView.as_view(),
         name='token_obtain_pair'
     ),
     path(
-        'v2/auth/refresh/',
+        'auth/refresh/',
         TokenRefreshView.as_view(),
         name='token_refresh'
     ),
