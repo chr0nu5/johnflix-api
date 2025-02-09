@@ -3,7 +3,6 @@ import random
 import re
 import time
 
-from django.core.cache import cache
 from content.models import Content
 from content.models import Episode
 from content.models import Genre
@@ -24,6 +23,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.postgres.search import SearchVector
+from django.core.cache import cache
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -1426,7 +1426,7 @@ class SearchView(View):
                 )
             })
 
-        _movies = Movie.objects.all()
+        _movies = Movie.objects.filter(hidden=False)
 
         for genre in g:
             genre = Genre.objects.filter(hash=genre).first()
