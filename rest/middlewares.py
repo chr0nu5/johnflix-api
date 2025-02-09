@@ -1,4 +1,12 @@
+from django.http import JsonResponse
+from django.utils.deprecation import MiddlewareMixin
 from rest_framework.permissions import BasePermission
+
+
+class AllowOptionsMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        if request.method == "OPTIONS":
+            return JsonResponse({"detail": "OK"}, status=200)
 
 
 class IsSuperUserOrVisibleOnly(BasePermission):

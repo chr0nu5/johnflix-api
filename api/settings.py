@@ -54,13 +54,14 @@ SIMPLE_JWT = {
 }
 
 MIDDLEWARE = [
+    'api.middleware.CorsMiddleware',
+    'rest.middlewares.AllowOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'api.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'api.urls'
