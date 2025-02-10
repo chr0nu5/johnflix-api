@@ -5,7 +5,9 @@ class CorsMiddleware(object):
     def __call__(self, request):
         response = self.get_response(request)
         response["Access-Control-Allow-Origin"] = "*"
-        response["Access-Control-Allow-Headers"] = "*"
+        response[
+            "Access-Control-Allow-Headers"
+        ] = "Authorization, Content-Type, X-Requested-With, Accept"
         response[
             "Access-Control-Allow-Methods"
         ] = "GET, OPTIONS, PATCH, POST, PUT, DELETE"
