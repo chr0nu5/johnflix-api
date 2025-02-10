@@ -16,6 +16,14 @@ class HiddenFilterMixin(object):
         return queryset
 
 
+class HashFilterMixin(object):
+    def filter_hash(self, queryset):
+        hash_param = self.request.query_params.get("hash")
+        if hash_param is not None:
+            return queryset.filter(hash=hash_param)
+        return queryset
+
+
 class OrderingMixin(object):
     allowed_order_fields = {}
 

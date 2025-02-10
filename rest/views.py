@@ -21,6 +21,7 @@ from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest.middlewares import IsSuperUserOrVisibleOnly
 from rest.mixins import CachedListMixin
+from rest.mixins import HashFilterMixin
 from rest.mixins import HiddenFilterMixin
 from rest.mixins import OrderingMixin
 from rest.pagination import CustomPageNumberPagination
@@ -51,6 +52,7 @@ class IsSuperUserOnly(BasePermission):
 
 class GenericViewSet(HiddenFilterMixin,
                      OrderingMixin,
+                     HashFilterMixin,
                      viewsets.ModelViewSet):
     pass
 
@@ -145,6 +147,7 @@ class MovieViewSet(CachedListMixin, GenericViewSet):
 
     def get_queryset(self):
         queryset = super(MovieViewSet, self).get_queryset()
+        queryset = self.filter_hash(queryset)
         queryset = self.filter_hidden(queryset)
         queryset = self.filter_ordering(queryset)
 
