@@ -244,9 +244,9 @@ class UserProfileView(APIView):
         username = request.user.username
         menu = []
 
-        menu.append({"name": "Movies", "slug": "movies"})
-        menu.append({"name": "Genres", "slug": "genres"})
-        menu.append({"name": "Tags", "slug": "tags"})
+        menu.append({"name": "Movies", "slug": "movies", "url": "movies"})
+        menu.append({"name": "Genres", "slug": "genres", "url": "genres"})
+        menu.append({"name": "Tags", "slug": "tags", "url": "tags"})
 
         hidden_param = request.query_params.get("hidden")
         contents_qs = Content.objects.all()
@@ -263,7 +263,8 @@ class UserProfileView(APIView):
         for content in contents_qs.order_by("name"):
             menu.append({
                 "hash": content.hash,
-                "name": content.name
+                "name": content.name,
+                "url": "content/{}".format(content.hash)
             })
 
         if request.user.is_superuser and hidden_param and \
