@@ -271,7 +271,7 @@ class UserProfileView(APIView):
                 hidden_param.lower() == "true":
             menu.append({"name": "Photos", "slug": "photos"})
 
-        return Response({"username": username, "menu": menu})
+        return Response({"username": username, "super": request.user.is_superuser ,"menu": menu})
 
 
 class UserWatchingView(APIView):
