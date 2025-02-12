@@ -10,6 +10,7 @@ from content.models import PhotoCollection
 from content.models import Playlist
 from content.models import Progress
 from content.models import Season
+from content.models import Subtitle
 from content.models import Tag
 from content.models import WatchList
 from rest.fields import CDNFileField
@@ -41,10 +42,19 @@ class TagSerializer(BaseCDNModelSerializer):
         fields = ('hash', 'name', 'cover')
 
 
+class SubtitleSerializer(BaseCDNModelSerializer):
+    vtt = CDNFileField()
+
+    class Meta:
+        model = Subtitle
+        fields = ('language', 'label', 'vtt')
+
+
 class MovieSerializer(BaseCDNModelSerializer):
     tag = TagSerializer(many=True, read_only=True)
     genre = GenreSerializer(many=True, read_only=True)
     progress = serializers.SerializerMethodField()
+    subtitle = SubtitleSerializer(read_only=True)
     # watchlist = serializers.SerializerMethodField()
 
     def get_progress(self, obj):
