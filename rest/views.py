@@ -245,7 +245,7 @@ class UserProfileView(APIView):
         username = request.user.username
         menu = []
 
-        menu.append({"name": "Movies", "slug": "movies", "url": "movies"})
+        # menu.append({"name": "Movies", "slug": "movies", "url": "movies"})
         menu.append({"name": "Genres", "slug": "genres", "url": "genres"})
         menu.append({"name": "Tags", "slug": "tags", "url": "tags"})
 
