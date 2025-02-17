@@ -142,7 +142,8 @@ class MovieViewSet(CachedListMixin, GenericViewSet):
 
     allowed_order_fields = {
         "date": "date",
-        "title": "title"
+        "title": "title",
+        "created_date": "created_date"
     }
 
     def get_queryset(self):

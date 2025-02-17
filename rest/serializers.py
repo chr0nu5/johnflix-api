@@ -104,7 +104,15 @@ class EpisodeSerializer(BaseCDNModelSerializer):
     season = serializers.SerializerMethodField()
     number = serializers.SerializerMethodField()
     progress = serializers.SerializerMethodField()
+    genre = serializers.SerializerMethodField()
+    media = serializers.SerializerMethodField()
     # watchlist = serializers.SerializerMethodField()
+
+    def get_genre(self, obj):
+        return []
+
+    def get_media(self, obj):
+        return obj.season.media.name
 
     def get_season(self, obj):
         if obj.season and obj.season.number is not None:
