@@ -55,7 +55,7 @@ class MovieSerializer(BaseCDNModelSerializer):
     genre = GenreSerializer(many=True, read_only=True)
     progress = serializers.SerializerMethodField()
     subtitle = SubtitleSerializer(read_only=True)
-    # watchlist = serializers.SerializerMethodField()
+    watchlist = serializers.SerializerMethodField()
 
     def get_progress(self, obj):
         request = self.context.get("request")
@@ -78,7 +78,7 @@ class MovieSerializer(BaseCDNModelSerializer):
         model = Movie
         # fields = '__all__'
         exclude = ['created_date', 'modified_date',
-                   'hidden', 'id', 'bypass_metadata', 'metadata', 'embed']
+                   'hidden', 'id', 'bypass_metadata', 'metadata']
 
 
 class ContentSerializer(BaseCDNModelSerializer):
@@ -106,7 +106,7 @@ class EpisodeSerializer(BaseCDNModelSerializer):
     progress = serializers.SerializerMethodField()
     genre = serializers.SerializerMethodField()
     media = serializers.SerializerMethodField()
-    # watchlist = serializers.SerializerMethodField()
+    watchlist = serializers.SerializerMethodField()
 
     def get_genre(self, obj):
         return []

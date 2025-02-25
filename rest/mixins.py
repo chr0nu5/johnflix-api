@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.core.cache import cache
 from rest_framework.response import Response
@@ -49,6 +51,9 @@ class CachedListMixin(object):
         query_string = "&".join(["{}={}".format(k, v)
                                  for k, v in sorted_params])
         user_flag = "super" if user.is_superuser else "normal"
+
+        return str(uuid.uuid1())
+
         key = "cache:{}:{}:{}".format(
             self.request.get_full_path(), user_flag, query_string)
         return key

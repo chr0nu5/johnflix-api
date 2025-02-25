@@ -486,9 +486,6 @@ class Movie(models.Model):
         blank=True,
         null=True
     )
-    embed = models.TextField(
-        default="", null=True, blank=True
-    )
     description = models.TextField(
         null=True, blank=True
     )
