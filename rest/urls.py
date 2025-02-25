@@ -3,6 +3,7 @@ from django.urls import path
 from rest.views import AddOrRemoveWatchListView
 from rest.views import ContentMediasViewSet
 from rest.views import ContentViewSet
+from rest.views import EpisodeViewSet
 from rest.views import GalleriesViewSet
 from rest.views import GalleryPhotosViewSet
 from rest.views import GenreMoviesViewSet
@@ -28,6 +29,7 @@ router = DefaultRouter()
 router.register(r'tags', TagViewSet)
 router.register(r'genres', GenreViewSet)
 router.register(r'movies', MovieViewSet)
+router.register(r'episode', EpisodeViewSet)
 router.register(r'contents', ContentViewSet)
 router.register(r'playlists', PlaylistViewSet)
 

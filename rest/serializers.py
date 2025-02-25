@@ -56,6 +56,10 @@ class MovieSerializer(BaseCDNModelSerializer):
     progress = serializers.SerializerMethodField()
     subtitle = SubtitleSerializer(read_only=True)
     watchlist = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+
+    def get_type(self, obj):
+        return "movie"
 
     def get_progress(self, obj):
         request = self.context.get("request")
@@ -105,13 +109,18 @@ class EpisodeSerializer(BaseCDNModelSerializer):
     number = serializers.SerializerMethodField()
     progress = serializers.SerializerMethodField()
     genre = serializers.SerializerMethodField()
-    media = serializers.SerializerMethodField()
+    show = serializers.SerializerMethodField()
     watchlist = serializers.SerializerMethodField()
+    type = serializers.SerializerMethodField()
+    next = serializers.SerializerMethodField()
+
+    def get_type(self, obj):
+        return "episode"
 
     def get_genre(self, obj):
         return []
 
-    def get_media(self, obj):
+    def get_show(self, obj):
         return obj.season.media.name
 
     def get_season(self, obj):
@@ -140,6 +149,42 @@ class EpisodeSerializer(BaseCDNModelSerializer):
         if request and request.user.is_authenticated:
             return obj.is_watchlist(request.user, WatchList)
         return False
+
+    def get_next(self, obj):
+
+        if self.context.get('is_next'):
+            return None
+
+        next_episode = Episode.objects.filter(
+            season=obj.season,
+            number=obj.number + 1,
+            hidden=False
+        ).first()
+
+        if next_episode:
+            return EpisodeSerializer(
+                next_episode,
+                context={**self.context, 'is_next': True}).data
+
+        next_season = Season.objects.filter(
+            media=obj.season.media,
+            number=obj.season.number + 1,
+            hidden=False
+        ).first()
+
+        if next_season:
+            first_episode_next_season = Episode.objects.filter(
+                season=next_season,
+                number=1,
+                hidden=False
+            ).first()
+
+            if first_episode_next_season:
+                return EpisodeSerializer(
+                    first_episode_next_season,
+                    context={**self.context, 'is_next': True}).data
+
+        return None
 
     class Meta:
         model = Episode

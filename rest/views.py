@@ -238,6 +238,24 @@ class SeasonEpisodesViewSet(CachedListMixin, GenericViewSet):
         return queryset
 
 
+class EpisodeViewSet(CachedListMixin, GenericViewSet):
+    queryset = Episode.objects.all()
+    serializer_class = EpisodeSerializer
+    permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
+    filter_backends = [DjangoFilterBackend]
+    pagination_class = CustomPageNumberPagination
+
+    allowed_order_fields = {
+        "hash": "hash"
+    }
+
+    def get_queryset(self):
+        queryset = super(EpisodeViewSet, self).get_queryset()
+        queryset = self.filter_hash(queryset)
+
+        return queryset
+
+
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -272,7 +290,11 @@ class UserProfileView(APIView):
                 hidden_param.lower() == "true":
             menu.append({"name": "Photos", "slug": "photos"})
 
-        return Response({"username": username, "super": request.user.is_superuser ,"menu": menu})
+        return Response({
+            "username": username,
+            "super": request.user.is_superuser,
+            "menu": menu
+        })
 
 
 class UserWatchingView(APIView):
