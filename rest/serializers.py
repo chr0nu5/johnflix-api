@@ -157,8 +157,7 @@ class EpisodeSerializer(BaseCDNModelSerializer):
 
         next_episode = Episode.objects.filter(
             season=obj.season,
-            number=obj.number + 1,
-            hidden=False
+            number=obj.number + 1
         ).first()
 
         if next_episode:
@@ -168,15 +167,13 @@ class EpisodeSerializer(BaseCDNModelSerializer):
 
         next_season = Season.objects.filter(
             media=obj.season.media,
-            number=obj.season.number + 1,
-            hidden=False
+            number=obj.season.number + 1
         ).first()
 
         if next_season:
             first_episode_next_season = Episode.objects.filter(
                 season=next_season,
-                number=1,
-                hidden=False
+                number=1
             ).first()
 
             if first_episode_next_season:
