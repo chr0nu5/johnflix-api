@@ -109,15 +109,16 @@ class Command(BaseCommand):
 
             if "results" in response and len(response["results"]) > 0:
                 for i, _result in enumerate(response["results"][:5]):
-                    print(
-                        "({}) - {} - {}".format(
-                            i+1,
-                            _result["title"],
-                            _result["release_date"]
+                    if "release_date" in _result:
+                        print(
+                            "({}) - {} - {}".format(
+                                i+1,
+                                _result["title"],
+                                _result["release_date"]
+                            )
                         )
-                    )
-                    print(_result["overview"])
-                    print()
+                        print(_result["overview"])
+                        print()
             else:
                 movie.bypass_metadata = True
                 movie.save()
