@@ -57,6 +57,24 @@ class MovieSerializer(BaseCDNModelSerializer):
     subtitle = SubtitleSerializer(read_only=True)
     watchlist = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
+    next = serializers.SerializerMethodField()
+
+    def get_next(self, obj):
+
+        if self.context.get('is_next'):
+            return None
+
+        playlist = Playlist.objects.filter(movies=obj).first()
+        if playlist:
+            next_movie = playlist.movies.filter(
+                date__gt=obj.date
+            ).order_by('date').first()
+            if next_movie:
+                context = self.context.copy()
+                context["next="] = True
+                return MovieSerializer(next_movie, context=context).data
+
+        return None
 
     def get_type(self, obj):
         return "movie"
