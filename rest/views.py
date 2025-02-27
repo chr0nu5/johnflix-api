@@ -106,14 +106,10 @@ class GenreMoviesViewSet(CachedListMixin, GenericViewSet):
         if not genre:
             return Response({"error": "Genre not found."}, status=404)
 
-        genre_data = {
-            "hash": genre.hash,
-            "name": genre.name,
-            "cover": genre.cover.url if genre.cover else None
-        }
+        genre_data = GenreSerializer(genre).data
 
         return self.get_paginated_response({
-            "genre": genre_data,
+            "info": genre_data,
             "movies": serializer.data
         })
 
@@ -166,14 +162,10 @@ class TagMoviesViewSet(CachedListMixin, GenericViewSet):
         if not tag:
             return Response({"error": "Tag not found."}, status=404)
 
-        tag_data = {
-            "hash": tag.hash,
-            "name": tag.name,
-            "cover": tag.cover.url if tag.cover else None
-        }
+        tag_data = TagSerializer(tag).data
 
         return self.get_paginated_response({
-            "tag": tag_data,
+            "info": tag_data,
             "movies": serializer.data
         })
 
