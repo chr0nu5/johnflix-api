@@ -95,6 +95,28 @@ class GenreMoviesViewSet(CachedListMixin, GenericViewSet):
         queryset = self.filter_ordering(queryset)
         return queryset
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        genre_hash = self.kwargs.get("hash")
+        genre = Genre.objects.filter(hash=genre_hash).first()
+
+        if not genre:
+            return Response({"error": "Genre not found."}, status=404)
+
+        genre_data = {
+            "hash": genre.hash,
+            "name": genre.name,
+            "cover": genre.cover.url if genre.cover else None
+        }
+
+        return self.get_paginated_response({
+            "genre": genre_data,
+            "movies": serializer.data
+        })
+
 
 class TagViewSet(CachedListMixin, GenericViewSet):
     queryset = Tag.objects.all()
@@ -132,6 +154,28 @@ class TagMoviesViewSet(CachedListMixin, GenericViewSet):
         queryset = self.filter_hidden(queryset)
         queryset = self.filter_ordering(queryset)
         return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        tag_hash = self.kwargs.get("hash")
+        tag = Tag.objects.filter(hash=tag_hash).first()
+
+        if not tag:
+            return Response({"error": "Tag not found."}, status=404)
+
+        tag_data = {
+            "hash": tag.hash,
+            "name": tag.name,
+            "cover": tag.cover.url if tag.cover else None
+        }
+
+        return self.get_paginated_response({
+            "tag": tag_data,
+            "movies": serializer.data
+        })
 
 
 class MovieViewSet(CachedListMixin, GenericViewSet):
