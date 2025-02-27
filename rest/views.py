@@ -17,6 +17,7 @@ from django.contrib.postgres.search import SearchRank
 from django.contrib.postgres.search import SearchVector
 from django.db.models import Count
 from django.db.models import F
+from django.db.models import Prefetch
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest.middlewares import IsSuperUserOrVisibleOnly
@@ -584,7 +585,9 @@ class SearchView(APIView):
 
 
 class PlaylistViewSet(CachedListMixin, GenericViewSet):
-    queryset = Playlist.objects.all()
+    queryset = Playlist.objects.prefetch_related(
+        Prefetch('movies', queryset=Movie.objects.order_by('date'))
+    )
     serializer_class = PlaylistSerializer
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
     filter_backends = [DjangoFilterBackend]
