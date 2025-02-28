@@ -331,6 +331,10 @@ class UserProfileView(APIView):
                 {"name": "Galleries", "slug": "galleries", "url": "galleries"}
             )
 
+        menu.append(
+            {"name": "Search", "slug": "search", "url": "search"}
+        )
+
         return Response({
             "username": username,
             "super": request.user.is_superuser,
