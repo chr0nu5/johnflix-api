@@ -843,6 +843,9 @@ class RecommendedMoviesView(APIView):
         limit = self.get_limit()
         movie_hash = request.query_params.get("hash")
 
+        additional = []
+        combined = []
+
         if movie_hash:
             cf_list = list(self.get_similar_movies(movie_hash, limit))
             if len(cf_list) < limit:
@@ -853,7 +856,7 @@ class RecommendedMoviesView(APIView):
                 additional = [
                     movie for movie in simple_list if movie.id not in cf_ids]
                 additional = additional[:remaining]
-                qs = cf_list + additional
+            qs = cf_list + additional
         else:
             cf_list = list(self.get_collaborative_recommendations(user, limit))
             if len(cf_list) < limit:
