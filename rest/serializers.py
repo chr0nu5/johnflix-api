@@ -208,6 +208,7 @@ class EpisodeSerializer(BaseCDNModelSerializer):
 
 
 class PhotoCollectionSerializer(BaseCDNModelSerializer):
+
     class Meta:
         model = PhotoCollection
         exclude = ['photos', 'id', 'hidden',
@@ -215,6 +216,7 @@ class PhotoCollectionSerializer(BaseCDNModelSerializer):
 
 
 class PhotoSerializer(BaseCDNModelSerializer):
+
     class Meta:
         model = Photo
         exclude = ['id', 'hidden', 'created_date', 'modified_date']

@@ -327,7 +327,9 @@ class UserProfileView(APIView):
 
         if request.user.is_superuser and hidden_param and \
                 hidden_param.lower() == "true":
-            menu.append({"name": "Photos", "slug": "photos"})
+            menu.append(
+                {"name": "Galleries", "slug": "galleries", "url": "galleries"}
+            )
 
         return Response({
             "username": username,
@@ -502,6 +504,24 @@ class GalleryPhotosViewSet(CachedListMixin, GenericViewSet):
             from django.db.models import QuerySet
             return QuerySet().none()
         return collection.photos.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        gallery_hash = self.kwargs.get("hash")
+        gallery = PhotoCollection.objects.filter(hash=gallery_hash).first()
+
+        if not gallery:
+            return Response({"error": "Gallery not found."}, status=404)
+
+        gallery_data = PhotoCollectionSerializer(gallery).data
+
+        return self.get_paginated_response({
+            "info": gallery_data,
+            "movies": serializer.data
+        })
 
 
 class ProgressSaveView(APIView):
