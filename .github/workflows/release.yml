@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 env:
-  CONTAINER_IMAGE: chr0nu5/base:johnflix-api
+  CONTAINER_IMAGE: chr0nu5/base:johnflix-backend
 
 jobs:
   build:
