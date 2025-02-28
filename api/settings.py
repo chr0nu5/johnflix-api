@@ -1,6 +1,7 @@
 import os
 import sys
 
+from datetime import timedelta
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,22 +19,49 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-# custom app
 INSTALLED_APPS = INSTALLED_APPS + [
     'content',
+    'rest',
+
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+
+    'django_filters',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 40,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=365),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'SIGNING_KEY': SECRET_KEY,
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
 MIDDLEWARE = [
+    'api.middleware.CorsMiddleware',
+    'rest.middlewares.AllowOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'api.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'api.urls'
@@ -69,6 +97,7 @@ DATABASES = {
 if 'test' in sys.argv or 'test_coverage' in sys.argv:
     DATABASES['default']['ENGINE'] = 'django.db.backends.sqlite3'
     DATABASES['default']['NAME'] = 'test'
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

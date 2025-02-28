@@ -486,9 +486,6 @@ class Movie(models.Model):
         blank=True,
         null=True
     )
-    embed = models.TextField(
-        default="", null=True, blank=True
-    )
     description = models.TextField(
         null=True, blank=True
     )
@@ -527,8 +524,6 @@ class Movie(models.Model):
                                          null=True)
 
     def is_watchlist(self, user, model):
-        if user.email == "anon@fehra.co":
-            return False
         found = model.objects.filter(user=user, movie=self).count()
         return found > 0
 
