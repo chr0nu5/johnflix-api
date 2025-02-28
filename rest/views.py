@@ -302,7 +302,6 @@ class UserProfileView(APIView):
 
         # menu.append({"name": "Movies", "slug": "movies", "url": "movies"})
         menu.append({"name": "Genres", "slug": "genres", "url": "genres"})
-        menu.append({"name": "Tags", "slug": "tags", "url": "tags"})
 
         hidden_param = request.query_params.get("hidden")
         contents_qs = Content.objects.all()
@@ -311,6 +310,9 @@ class UserProfileView(APIView):
             if hidden_param is not None:
                 if hidden_param.lower() == "true":
                     contents_qs = contents_qs.filter(hidden=True)
+                    menu.append(
+                        {"name": "Tags", "slug": "tags", "url": "tags"}
+                    )
                 elif hidden_param.lower() == "false":
                     contents_qs = contents_qs.filter(hidden=False)
         else:
