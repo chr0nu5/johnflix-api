@@ -13,6 +13,7 @@ from content.models import Season
 from content.models import Subtitle
 from content.models import Tag
 from content.models import WatchList
+from django.db.models import F
 from rest.fields import CDNFileField
 from rest_framework import serializers
 
@@ -67,7 +68,7 @@ class MovieSerializer(BaseCDNModelSerializer):
         playlist = Playlist.objects.filter(movies=obj).first()
         if playlist:
             next_movie = playlist.movies.filter(
-                date__gt=obj.date
+                date__gt=obj.date if obj.date else obj.created_date
             ).order_by('date').first()
             if next_movie:
                 context = self.context.copy()

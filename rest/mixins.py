@@ -2,6 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.core.cache import cache
+from django.db.models import F
 from rest_framework.response import Response
 
 
@@ -30,16 +31,21 @@ class OrderingMixin(object):
     allowed_order_fields = {}
 
     def filter_ordering(self, queryset):
-        order_by = self.request.query_params.get("order_by")
+        order_by = self.request.query_params.get("order_by", "created_date")
         order_direction = self.request.query_params.get(
             "order_direction", "asc").lower()
+
         if order_by and (order_by in self.allowed_order_fields):
             model_field = self.allowed_order_fields[order_by]
+
+            # Use NullsLast or NullsFirst to handle None values
             if order_direction == "desc":
-                ordering_field = "-{}".format(model_field)
+                ordering_field = F(model_field).desc(nulls_last=True)
             else:
-                ordering_field = model_field
+                ordering_field = F(model_field).asc(nulls_first=True)
+
             return queryset.order_by(ordering_field)
+
         return queryset
 
 
