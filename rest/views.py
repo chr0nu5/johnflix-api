@@ -201,6 +201,24 @@ class MovieViewSet(CachedListMixin, GenericViewSet):
 
         return queryset
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+
+        cover = None
+
+        if len(serializer.data) > 0:
+            cover = serializer.data[0]["cover"]
+
+        return self.get_paginated_response({
+            "info": {
+                "name": "All Movies",
+                "cover": cover
+            },
+            "movies": serializer.data
+        })
+
 
 class ContentViewSet(CachedListMixin, GenericViewSet):
     queryset = Content.objects.all()
@@ -641,7 +659,21 @@ class SearchView(APIView):
             many=True,
             context={"request": request}
         )
-        data = {"results": serializer.data}
+
+        cover = None
+
+        if len(serializer.data) > 0:
+            cover = serializer.data[0]["cover"]
+
+        data = {
+            "results": {
+                "info": {
+                    "name": "Searched for {}".format(s),
+                    "cover": cover
+                },
+                "movies": serializer.data
+            }
+        }
 
         return Response(data)
 
