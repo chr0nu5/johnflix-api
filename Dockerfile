@@ -32,6 +32,9 @@ RUN mkdir /app/tmp
 WORKDIR /app
 
 COPY . /app
+COPY rest /app
+
+RUN ls -l
 
 COPY _patch/utils.py /usr/local/lib/python3.9/site-packages/django/core/files/utils.py
 
