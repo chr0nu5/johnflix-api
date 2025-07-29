@@ -38,7 +38,6 @@ class OrderingMixin(object):
         if order_by and (order_by in self.allowed_order_fields):
             model_field = self.allowed_order_fields[order_by]
 
-            # Use NullsLast or NullsFirst to handle None values
             if order_direction == "desc":
                 ordering_field = F(model_field).desc(nulls_last=True)
             else:
@@ -57,8 +56,6 @@ class CachedListMixin(object):
         query_string = "&".join(["{}={}".format(k, v)
                                  for k, v in sorted_params])
         user_flag = "super" if user.is_superuser else "normal"
-
-        return str(uuid.uuid1())
 
         key = "cache:{}:{}:{}".format(
             self.request.get_full_path(), user_flag, query_string)

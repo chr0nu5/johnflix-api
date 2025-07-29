@@ -311,7 +311,7 @@ class EpisodeViewSet(CachedListMixin, GenericViewSet):
         return queryset
 
 
-class UserProfileView(APIView):
+class UserProfileView(CachedListMixin, APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
@@ -416,7 +416,7 @@ class UserWatchingView(APIView):
         return paginator.get_paginated_response(results)
 
 
-class UserWatchlistView(APIView):
+class UserWatchlistView(CachedListMixin, APIView):
     permission_classes = [IsAuthenticated, IsSuperUserOrVisibleOnly]
 
     def get(self, request, format=None):

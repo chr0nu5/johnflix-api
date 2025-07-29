@@ -15,16 +15,21 @@ from content.models import WatchParty
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from unfold.admin import ModelAdmin
 
 
-class ContentAdmin(admin.ModelAdmin):
+class BaseAdmin(ModelAdmin):
+    pass
+
+
+class ContentAdmin(BaseAdmin):
     list_display = ['name', 'get_cover', 'created_date', 'hidden', 'link']
     list_filter = ['created_date', 'hidden']
     list_editable = ['hidden']
     exclude = ['hash']
 
 
-class GenreAdmin(admin.ModelAdmin):
+class GenreAdmin(BaseAdmin):
     list_display = ['name', 'get_cover', 'cover', 'created_date', 'hidden',
                     'link', 'featured', 'order']
     list_filter = ['created_date', 'hidden']
@@ -32,7 +37,7 @@ class GenreAdmin(admin.ModelAdmin):
     exclude = ['hash']
 
 
-class MediaAdmin(admin.ModelAdmin):
+class MediaAdmin(BaseAdmin):
     list_display = ['name', 'get_cover', 'date',
                     'created_date', 'hidden', 'link']
     list_filter = ['date', 'created_date', 'hidden']
@@ -41,7 +46,7 @@ class MediaAdmin(admin.ModelAdmin):
     exclude = ['hash']
 
 
-class SeasonAdmin(admin.ModelAdmin):
+class SeasonAdmin(BaseAdmin):
     list_display = ['media', 'title', 'number', 'date',
                     'created_date', 'hidden', 'link']
     list_filter = ['date', 'created_date', 'hidden']
@@ -49,7 +54,7 @@ class SeasonAdmin(admin.ModelAdmin):
     exclude = ['hash']
 
 
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(BaseAdmin):
     list_display = ['name', 'get_cover', 'created_date', 'cover',
                     'hidden', 'link', 'order']
     list_filter = ['created_date', 'hidden']
@@ -58,11 +63,11 @@ class TagAdmin(admin.ModelAdmin):
     exclude = ['hash']
 
 
-class SubtitleAdmin(admin.ModelAdmin):
+class SubtitleAdmin(BaseAdmin):
     list_display = ['language', 'label', 'vtt']
 
 
-class EpisodeAdmin(admin.ModelAdmin):
+class EpisodeAdmin(BaseAdmin):
     list_display = ['title', 'season', 'number',
                     'get_cover', 'media', 'duration', 'date',
                     'hidden', 'link']
@@ -73,7 +78,7 @@ class EpisodeAdmin(admin.ModelAdmin):
     exclude = ['hash']
 
 
-class MovieAdmin(admin.ModelAdmin):
+class MovieAdmin(BaseAdmin):
     list_display = ['title', 'get_cover', 'cover',
                     'duration', 'date', 'hidden', 'link']
     list_filter = ['date', 'created_date', 'hidden', 'tag', 'genre']
@@ -83,17 +88,17 @@ class MovieAdmin(admin.ModelAdmin):
     exclude = ['hash', 'metadata', 'bypass_metadata']
 
 
-class ProgressAdmin(admin.ModelAdmin):
+class ProgressAdmin(BaseAdmin):
     list_display = ['user', 'episode', 'movie', 'time', 'speed']
 
 
-class PhotoAdmin(admin.ModelAdmin):
+class PhotoAdmin(BaseAdmin):
     list_display = ['id', 'photo', 'hidden', 'created_date']
     list_editable = ['hidden']
     exclude = ['hash']
 
 
-class PhotoCollectionAdmin(admin.ModelAdmin):
+class PhotoCollectionAdmin(BaseAdmin):
     list_display = ['hash', 'title', 'cover', 'hidden', 'link']
     filter_horizontal = ['tag', 'genre', 'photos']
     list_editable = ['hidden']
@@ -101,15 +106,15 @@ class PhotoCollectionAdmin(admin.ModelAdmin):
     exclude = ['hash']
 
 
-class WatchListAdmin(admin.ModelAdmin):
+class WatchListAdmin(BaseAdmin):
     list_display = ['user', 'episode', 'movie']
 
 
-class WatchPartyAdmin(admin.ModelAdmin):
+class WatchPartyAdmin(BaseAdmin):
     list_display = ['hash', 'user', 'movie', 'playing', 'current_time', 'link']
 
 
-class PlaylistAdmin(admin.ModelAdmin):
+class PlaylistAdmin(BaseAdmin):
     list_display = ['pk', 'get_cover', 'name', 'link', 'hidden']
     list_editable = ['name', 'hidden']
     exclude = ['hash']

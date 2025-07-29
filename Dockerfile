@@ -25,6 +25,7 @@ RUN pip install python-magic==0.4.26
 RUN pip install pytz==2024.1
 RUN pip install requests==2.31.0
 RUN pip install redis==5.2.1
+RUN pip install django-unfold==0.59.0
 
 RUN mkdir /app
 RUN mkdir /app/tmp
